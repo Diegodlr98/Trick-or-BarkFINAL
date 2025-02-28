@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 32644546}
   - component: {fileID: 32644545}
   m_Layer: 0
-  m_Name: Enemy3 (1)
+  m_Name: Enemy5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,7 +148,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a99e04c122509fa4ea036439b595a643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolPoints: []
+  patrolPoints:
+  - {fileID: 2048634555}
+  - {fileID: 1623650484}
+  - {fileID: 2051884184}
+  - {fileID: 788036395}
+  - {fileID: 875734112}
+  - {fileID: 1108064000}
+  - {fileID: 566408310}
+  - {fileID: 711333838}
+  - {fileID: 1780240136}
+  - {fileID: 200971638}
+  - {fileID: 1458818397}
+  - {fileID: 1142671723}
+  - {fileID: 1700947365}
+  - {fileID: 1395079149}
+  - {fileID: 1980892278}
+  - {fileID: 554052495}
+  - {fileID: 830453963}
   targetPoint: 0
   speed: 30
   rotationSpeed: 1.5
@@ -2637,7 +2654,7 @@ GameObject:
   - component: {fileID: 414239072}
   - component: {fileID: 414239071}
   m_Layer: 0
-  m_Name: Enemy2
+  m_Name: Enemy3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12060,7 +12077,7 @@ GameObject:
   - component: {fileID: 1900510725}
   - component: {fileID: 1900510726}
   m_Layer: 0
-  m_Name: Enemy3
+  m_Name: Enemy4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12580,7 +12597,7 @@ PrefabInstance:
       objectReference: {fileID: 1595041733}
     - target: {fileID: 6605127946943951527, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
       propertyPath: m_Name
-      value: Enemy (1)
+      value: Enemy2
       objectReference: {fileID: 0}
     - target: {fileID: 8689560038646092352, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
       propertyPath: m_LocalPosition.x
