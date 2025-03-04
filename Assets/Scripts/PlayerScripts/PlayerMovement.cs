@@ -59,11 +59,9 @@ public class PlayerMovement : MonoBehaviour
 
         candyUI.UpdateCandyCount(CandyCount);
         memoryUI.UpdateMemoryCount(memoryCount);
-        
-        if (dashIcon != null)
-        {
-            dashIcon.SetActive(true);
-        }
+
+        UpdateDashIconVisibility();
+               
     }
 
     private void Update()
@@ -75,23 +73,23 @@ public class PlayerMovement : MonoBehaviour
             if (jumpAction.WasPressedThisFrame() && controller.isGrounded)
             {
                 velocity = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale)); //calcula el valor de la velocitat inicial para que al decrementarlo posteriormente llegue a la altura indicada                            
-            }           
+            }
         }
         if (CandyCount >= 3)
         {
             if (jumpAction.WasPressedThisFrame() && jumpCount < 1)
             {
-                velocity = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));            
+                velocity = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
                 jumpCount++;
             }
             if (controller.isGrounded)
             {
                 jumpCount = 0;
             }
-        }                           
+        }
         velocity += -9.8f * gravityScale * Time.deltaTime; //decremento de la velocidad
 
-        if (sprintAction.IsPressed() && controller.isGrounded )
+        if (sprintAction.IsPressed() && controller.isGrounded)
         {
             sprint = 2;
         }
@@ -109,24 +107,25 @@ public class PlayerMovement : MonoBehaviour
 
         if (dashAction.WasPressedThisFrame() && CandyCount >= 5)
         {
-            StartCoroutine(dashCoroutine());            
-        }
-
-        if (!canDash) 
-        {
-            if (dashIcon != null)
-            {
-                dashIcon.SetActive(false); 
-            }
-        }
-        else 
-        {
-            if (dashIcon != null)
-            {
-                dashIcon.SetActive(true); 
-            }
+            StartCoroutine(dashCoroutine());
         }
     }
+
+        private void UpdateDashIconVisibility()
+        {
+            if (dashIcon != null)
+            {
+                if (CandyCount >= 5 && canDash)
+                {
+                    dashIcon.SetActive(true); // muestra el icono cuando hay suficientes chuches
+                }
+                else
+                {
+                    dashIcon.SetActive(false); // Oculta el icono hasta que se consiguen las suficientes chuches
+                }
+            }
+        }
+    
     private IEnumerator dashCoroutine()
     {
         if (!canDash) yield break;
