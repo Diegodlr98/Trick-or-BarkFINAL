@@ -186,11 +186,7 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(PlayMemoryVideo());
             }
         }
-        if (other.CompareTag("Tutorial"))
-        {
-            Destroy(other.gameObject);
-
-        }
+        
     }
     private IEnumerator ShowMemorySprite(Sprite sprite)
     {

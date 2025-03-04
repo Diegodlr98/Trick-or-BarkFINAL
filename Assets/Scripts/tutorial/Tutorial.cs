@@ -21,13 +21,13 @@ public class TutorialMessages : MonoBehaviour
     {
         // Mensaje inicial
         ShowMessage("¡Usa WASD para moverte y recoge chuches para obtener poderes!.");
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         HideMessage();
 
         // Mensaje programado después de un tiempo
-        yield return new WaitForSeconds(5f);
-        ShowMessage("Salta con ESPACIO, recoge fragmentos de memoria.");
         yield return new WaitForSeconds(3f);
+        ShowMessage("Salta con ESPACIO, recoge fragmentos de memoria.");
+        yield return new WaitForSeconds(5f);
         HideMessage();
     }
 
@@ -38,7 +38,7 @@ public class TutorialMessages : MonoBehaviour
         {
             doubleJumpMessageShown = true; // Evita que se muestre repetidamente
             ShowMessage("¡Has desbloqueado el DOBLE SALTO!");
-            StartCoroutine(HideAfterDelay(3f));
+            StartCoroutine(HideAfterDelay(5f));
         }
 
         // Mensaje para el dash (se muestra solo una vez)
@@ -46,7 +46,7 @@ public class TutorialMessages : MonoBehaviour
         {
             dashMessageShown = true; // Evita que se muestre repetidamente
             ShowMessage("¡Has desbloqueado el DASH! Usa E para impulsarte.");
-            StartCoroutine(HideAfterDelay(3f));
+            StartCoroutine(HideAfterDelay(5f));
         }
     }
 
