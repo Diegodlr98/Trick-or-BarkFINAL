@@ -5,6 +5,7 @@ using Unity.XR.GoogleVr;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -24,7 +25,10 @@ public class PlayerMovement : MonoBehaviour
 
     float velocity; //valor coordenada Y en cada momento (altura)    
     Vector3 movement; //Coordenades del moviment total
-    
+
+    public Image memoryUIImage;
+    public UnityEngine.Video.VideoPlayer memoryVideoPlayer;
+
 
     public int speed = 10; //velocitat del personatge
     public int gravityScale = 10;
@@ -163,13 +167,24 @@ public class PlayerMovement : MonoBehaviour
             CandyCount++;
 
             candyUI.UpdateCandyCount(CandyCount);
-        }           
+        }
         if (other.CompareTag("Memory"))
         {
-            Destroy(other.gameObject);
-            memoryCount = memoryCount + 1;
+            Memory memoryScript = other.GetComponent<Memory>(); // Accede al script de Memory
+            if (memoryScript != null)
+            {
+                StartCoroutine(ShowMemorySprite(memoryScript.memorySprite)); // Muestra el sprite
+            }
 
+            Destroy(other.gameObject);
+            memoryCount++;
             memoryUI.UpdateMemoryCount(memoryCount);
+
+            // Si recoge los 6, muestra el video
+            if (memoryCount >= 6)
+            {
+                StartCoroutine(PlayMemoryVideo());
+            }
         }
         if (other.CompareTag("Tutorial"))
         {
@@ -177,4 +192,40 @@ public class PlayerMovement : MonoBehaviour
 
         }
     }
+    private IEnumerator ShowMemorySprite(Sprite sprite)
+    {
+        Time.timeScale = 0f;
+        if (memoryUIImage != null)
+        {
+            memoryUIImage.sprite = sprite; // Cambia el sprite en la UI
+            memoryUIImage.gameObject.SetActive(true); // Asegúrate de activar el objeto de la imagen en la UI
+
+            yield return new WaitForSecondsRealtime(5f); // Muestra el sprite por 5 segundos
+
+            memoryUIImage.gameObject.SetActive(false); // Desactiva la imagen después de 5 segundos
+        }
+        Time.timeScale = 1f;
+    }
+    private IEnumerator PlayMemoryVideo()
+    {
+        // Activa el VideoPlayer en la escena
+
+        yield return new WaitForSeconds(1f);
+
+        if (memoryVideoPlayer != null)
+        {
+            memoryVideoPlayer.gameObject.SetActive(true);
+            memoryVideoPlayer.Play();
+
+            // Espera hasta que termine el video
+            while (memoryVideoPlayer.isPlaying)
+            {
+                yield return null;
+            }
+
+            // Después de que el video termine, carga la siguiente escena
+            SceneManager.LoadScene("Final");
+        }
+    }
+
 }
