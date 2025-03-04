@@ -197,12 +197,12 @@ public class PlayerMovement : MonoBehaviour
         Time.timeScale = 0f;
         if (memoryUIImage != null)
         {
-            memoryUIImage.sprite = sprite; // Cambia el sprite en la UI
-            memoryUIImage.gameObject.SetActive(true); // Asegúrate de activar el objeto de la imagen en la UI
+            memoryUIImage.sprite = sprite; // Cambia el sprite en la UI al que tenga el objeto que se recoge
+            memoryUIImage.gameObject.SetActive(true); 
 
-            yield return new WaitForSecondsRealtime(5f); // Muestra el sprite por 5 segundos
+            yield return new WaitForSecondsRealtime(2f); // Muestra el sprite por 2 segundos
 
-            memoryUIImage.gameObject.SetActive(false); // Desactiva la imagen después de 5 segundos
+            memoryUIImage.gameObject.SetActive(false); 
         }
         Time.timeScale = 1f;
     }
@@ -222,8 +222,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 yield return null;
             }
-
-            // Después de que el video termine, carga la siguiente escena
+           
             SceneManager.LoadScene("Final");
         }
     }

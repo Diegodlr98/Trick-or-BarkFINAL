@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Memory : MonoBehaviour
 {
-    public Sprite memorySprite; // Sprite específico para este Memory
+    public Sprite memorySprite; // sprite especifico para este objeto
 
     [HideInInspector]
-    public SpriteRenderer memorySpriteRenderer; // Será asignado desde PlayerMovement
+    public SpriteRenderer memorySpriteRenderer; // asignar la imagen que quiero mostrar
 }
