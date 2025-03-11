@@ -26,7 +26,7 @@ public class PlayerHealth : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Light"))
+        if (other.CompareTag("CarLight"))
         {
             canTakeDamage = true;
         }
@@ -35,7 +35,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (currentHealth > 0)
         {
-            currentHealth -= 1;
+            currentHealth -= 3;
             healthUI.UpdateHearts(currentHealth);
             canTakeDamage = false;
 

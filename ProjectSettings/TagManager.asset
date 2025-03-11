@@ -9,6 +9,7 @@ TagManager:
   - Memory
   - Enemy
   - Tutorial
+  - CarLight
   layers:
   - Default
   - TransparentFX

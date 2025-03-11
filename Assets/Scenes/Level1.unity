@@ -2212,7 +2212,7 @@ GameObject:
   - component: {fileID: 32644545}
   m_Layer: 0
   m_Name: Enemy5
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2259,12 +2259,12 @@ Transform:
   m_GameObject: {fileID: 32644544}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710653, z: -0, w: -0.70710707}
-  m_LocalPosition: {x: -62.7, y: 5.79, z: -177.2}
+  m_LocalPosition: {x: 279.94366, y: -2.755745, z: -291.34912}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 862628846}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 936127491}
   m_LocalEulerAnglesHint: {x: 0, y: -270, z: 0}
 --- !u!1 &34218778
 GameObject:
@@ -2536,7 +2536,7 @@ GameObject:
   - component: {fileID: 40022718}
   m_Layer: 0
   m_Name: Spot Light (4)
-  m_TagString: Light
+  m_TagString: CarLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22146,7 +22146,7 @@ GameObject:
   - component: {fileID: 414239071}
   m_Layer: 0
   m_Name: Enemy3
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -22203,13 +22203,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 414239070}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -157.51, y: 5, z: 8.1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 185.13368, y: -3.545745, z: -106.04914}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 341446597}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 936127491}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &416628841
 GameObject:
@@ -28324,7 +28324,7 @@ GameObject:
   - component: {fileID: 577220222}
   m_Layer: 0
   m_Name: Spot Light (4)
-  m_TagString: Light
+  m_TagString: CarLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29796,7 +29796,7 @@ GameObject:
   - component: {fileID: 604771114}
   m_Layer: 0
   m_Name: Spot Light (5)
-  m_TagString: Light
+  m_TagString: CarLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39414,6 +39414,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 9151599788480378425, guid: 13d6b582585475640a85d9d0aca69691, type: 3}
+--- !u!4 &793428965 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8689560038646092352, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
+  m_PrefabInstance: {fileID: 1976971770}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &793575222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46286,6 +46291,42 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 9151599788480378425, guid: 13d6b582585475640a85d9d0aca69691, type: 3}
+--- !u!1 &936127490
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 936127491}
+  m_Layer: 0
+  m_Name: EnemyCars
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &936127491
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936127490}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -342.64368, y: 8.545745, z: 114.14914}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1613751413}
+  - {fileID: 793428965}
+  - {fileID: 414239072}
+  - {fileID: 1900510725}
+  - {fileID: 32644546}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &936535812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60152,19 +60193,23 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 936127491}
     m_Modifications:
+    - target: {fileID: 711194571035300024, guid: b8aac7cc34de738419a8b32ec4879fa4, type: 3}
+      propertyPath: m_TagString
+      value: CarLight
+      objectReference: {fileID: 0}
     - target: {fileID: 2364856074916364140, guid: b8aac7cc34de738419a8b32ec4879fa4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -27.7
+      value: 314.94366
       objectReference: {fileID: 0}
     - target: {fileID: 2364856074916364140, guid: b8aac7cc34de738419a8b32ec4879fa4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.9
+      value: -4.645745
       objectReference: {fileID: 0}
     - target: {fileID: 2364856074916364140, guid: b8aac7cc34de738419a8b32ec4879fa4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 91.8
+      value: -22.349136
       objectReference: {fileID: 0}
     - target: {fileID: 2364856074916364140, guid: b8aac7cc34de738419a8b32ec4879fa4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -60310,8 +60355,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 6158043609259507448, guid: b8aac7cc34de738419a8b32ec4879fa4, type: 3}
+      propertyPath: m_TagString
+      value: CarLight
+      objectReference: {fileID: 0}
     - target: {fileID: 6952093443575971760, guid: b8aac7cc34de738419a8b32ec4879fa4, type: 3}
       propertyPath: m_Name
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6952093443575971760, guid: b8aac7cc34de738419a8b32ec4879fa4, type: 3}
+      propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -61601,7 +61654,7 @@ GameObject:
   - component: {fileID: 1288293425}
   m_Layer: 0
   m_Name: Spot Light (3)
-  m_TagString: Light
+  m_TagString: CarLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -65652,7 +65705,7 @@ GameObject:
   - component: {fileID: 1387071187}
   m_Layer: 0
   m_Name: Spot Light (2)
-  m_TagString: Light
+  m_TagString: CarLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75342,6 +75395,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heartPrefab: {fileID: 5495880620611635337, guid: 42b837f9f3244024982e53704d7c823f, type: 3}
   hearts: []
+--- !u!4 &1613751413 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2364856074916364140, guid: b8aac7cc34de738419a8b32ec4879fa4, type: 3}
+  m_PrefabInstance: {fileID: 1245148266}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1615000855
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -87686,7 +87744,7 @@ GameObject:
   - component: {fileID: 1900510726}
   m_Layer: 0
   m_Name: Enemy4
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87700,12 +87758,12 @@ Transform:
   m_GameObject: {fileID: 1900510724}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: -0.0000008344649}
-  m_LocalPosition: {x: -301.27, y: 5.79, z: -129.14}
+  m_LocalPosition: {x: 41.373688, y: -2.755745, z: -243.28914}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 500587683}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 936127491}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!114 &1900510726
 MonoBehaviour:
@@ -91615,7 +91673,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 936127491}
     m_Modifications:
     - target: {fileID: 3096646443139959372, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
       propertyPath: m_LocalScale.x
@@ -91664,6 +91722,14 @@ PrefabInstance:
     - target: {fileID: 3096646443139959372, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -82.106995
+      objectReference: {fileID: 0}
+    - target: {fileID: 4920415067503264642, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
+      propertyPath: m_TagString
+      value: CarLight
+      objectReference: {fileID: 0}
+    - target: {fileID: 6008934923062114284, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
+      propertyPath: m_TagString
+      value: CarLight
       objectReference: {fileID: 0}
     - target: {fileID: 6325444192847933934, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
@@ -91737,17 +91803,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy2
       objectReference: {fileID: 0}
+    - target: {fileID: 6605127946943951527, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 8689560038646092352, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 53.1
+      value: 395.74368
       objectReference: {fileID: 0}
     - target: {fileID: 8689560038646092352, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.9
+      value: -4.645745
       objectReference: {fileID: 0}
     - target: {fileID: 8689560038646092352, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 210.2
+      value: 96.05086
       objectReference: {fileID: 0}
     - target: {fileID: 8689560038646092352, guid: 31f50b652b28cba41afde7e6a86045ac, type: 3}
       propertyPath: m_LocalRotation.w
@@ -97914,7 +97984,7 @@ GameObject:
   - component: {fileID: 2126736885}
   m_Layer: 0
   m_Name: Spot Light (5)
-  m_TagString: Light
+  m_TagString: CarLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98872,16 +98942,12 @@ SceneRoots:
   - {fileID: 416628842}
   - {fileID: 1397761211}
   - {fileID: 988271772}
-  - {fileID: 1245148266}
-  - {fileID: 1976971770}
   - {fileID: 1499035067}
   - {fileID: 297452257}
-  - {fileID: 414239072}
-  - {fileID: 1900510725}
-  - {fileID: 32644546}
   - {fileID: 1830423664}
   - {fileID: 671871296}
   - {fileID: 15933363}
   - {fileID: 250849411}
   - {fileID: 2017520218}
   - {fileID: 290402548}
+  - {fileID: 936127491}
