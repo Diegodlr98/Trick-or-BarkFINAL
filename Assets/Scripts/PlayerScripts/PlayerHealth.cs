@@ -6,9 +6,10 @@ public class PlayerHealth : MonoBehaviour
     public int maxHealth = 3;
     private int currentHealth;
     public HealthUI healthUI;
-    public MenuPausa pauseMenu;
+    public GameObject gameOver;
 
     private bool canTakeDamage = true;
+    public bool gameover = false;
 
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -21,6 +22,10 @@ public class PlayerHealth : MonoBehaviour
     {
         if (other.CompareTag("Light") && canTakeDamage)
         {
+            TakeLightDamage();
+        }
+        if (other.CompareTag("car") && canTakeDamage)
+        {
             TakeDamage();
         }
     }
@@ -29,6 +34,24 @@ public class PlayerHealth : MonoBehaviour
         if (other.CompareTag("CarLight"))
         {
             canTakeDamage = true;
+        }
+        if (other.CompareTag("car"))
+        {
+            canTakeDamage = true;
+        }
+    }
+    
+    private void TakeLightDamage()
+    {
+        if (currentHealth > 0)
+        {
+            currentHealth -= 1;
+            healthUI.UpdateHearts(currentHealth);            
+
+            if (currentHealth <= 0)
+            {
+                GameOver();
+            }
         }
     }
     private void TakeDamage()
@@ -47,7 +70,11 @@ public class PlayerHealth : MonoBehaviour
     }
     private void GameOver()
     {
-        pauseMenu.ShowPauseMenu();
+        gameOver.SetActive(true);
+        gameover = true;
+        Time.timeScale = 0f;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     
