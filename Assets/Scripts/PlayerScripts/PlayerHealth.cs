@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-
     public int maxHealth = 3;
     private int currentHealth;
     public HealthUI healthUI;
@@ -11,8 +10,6 @@ public class PlayerHealth : MonoBehaviour
     private bool canTakeDamage = true;
     public bool gameover = false;
 
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         currentHealth = maxHealth;
@@ -20,52 +17,45 @@ public class PlayerHealth : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Light") && canTakeDamage)
+        if (canTakeDamage)
         {
-            TakeLightDamage();
-        }
-        if (other.CompareTag("car") && canTakeDamage)
-        {
-            TakeDamage();
+            if (other.CompareTag("Light"))
+            {
+                TakeLightDamage();
+            }
+            else if (other.CompareTag("car"))
+            {
+                TakeDamage();
+            }
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("CarLight"))
+        if (other.CompareTag("Light") || other.CompareTag("car"))
         {
-            canTakeDamage = true;
-        }
-        if (other.CompareTag("car"))
-        {
-            canTakeDamage = true;
+            canTakeDamage = true; 
         }
     }
-    
     private void TakeLightDamage()
     {
-        if (currentHealth > 0)
-        {
-            currentHealth -= 1;
-            healthUI.UpdateHearts(currentHealth);            
+        currentHealth -= 1;
+        healthUI.UpdateHearts(currentHealth);
+        canTakeDamage = false;
 
-            if (currentHealth <= 0)
-            {
-                GameOver();
-            }
+        if (currentHealth <= 0)
+        {
+            GameOver();
         }
     }
     private void TakeDamage()
     {
-        if (currentHealth > 0)
-        {
-            currentHealth -= 3;
-            healthUI.UpdateHearts(currentHealth);
-            canTakeDamage = false;
+        currentHealth -= 3;
+        healthUI.UpdateHearts(currentHealth);
+        canTakeDamage = false;
 
-            if (currentHealth <= 0)
-            {
-                GameOver();
-            }
+        if (currentHealth <= 0)
+        {
+            GameOver();
         }
     }
     private void GameOver()
@@ -76,6 +66,4 @@ public class PlayerHealth : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
-
-    
 }
