@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerBehav : MonoBehaviour
+public class Animations : MonoBehaviour
 {
 
     //private properties
