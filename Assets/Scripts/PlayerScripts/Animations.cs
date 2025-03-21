@@ -35,7 +35,7 @@ public class Animations : MonoBehaviour
             anim.SetBool("walk", false);
         }
 
-        if (jumpAction.IsPressed())
+        if (jumpAction.WasPressedThisFrame())
         {
             anim.SetTrigger("jump");
         }
@@ -48,7 +48,7 @@ public class Animations : MonoBehaviour
         {
             anim.SetBool("sprint", false);
         }
-        if(dashAction.IsPressed())
+        if(dashAction.WasPressedThisFrame())
         {
             anim.SetTrigger("Dash");
         }
