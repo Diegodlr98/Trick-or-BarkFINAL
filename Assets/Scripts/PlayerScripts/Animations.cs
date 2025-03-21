@@ -6,6 +6,7 @@ public class Animations : MonoBehaviour
 
     //private properties
     private Animator anim;
+    public CharacterController characterController;
 
     InputAction moveAction;
     InputAction jumpAction;
@@ -15,6 +16,7 @@ public class Animations : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        characterController = GetComponent<CharacterController>();
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
         sprintAction = InputSystem.actions.FindAction("Sprint");
@@ -50,5 +52,8 @@ public class Animations : MonoBehaviour
         {
             anim.SetTrigger("Dash");
         }
-    }
+
+            anim.SetBool("IsGrounded", characterController.isGrounded);
+        }
+
 }
