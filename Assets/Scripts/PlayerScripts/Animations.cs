@@ -48,12 +48,15 @@ public class Animations : MonoBehaviour
         {
             anim.SetBool("sprint", false);
         }
-        if(dashAction.WasPressedThisFrame())
+
+        if (dashAction.WasPressedThisFrame())
         {
             anim.SetTrigger("Dash");
         }
 
             anim.SetBool("IsGrounded", characterController.isGrounded);
-        }
+        
+    }
+    
 
 }
