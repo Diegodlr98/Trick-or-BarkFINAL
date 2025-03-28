@@ -3,7 +3,17 @@ guid: 67732f2e1fe7dc4418da734553e21db1
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass_Vertical_Window_Wall
+    second: {fileID: 2100000, guid: 36c3eb8550a2a104bb94f08f2f3b4226, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Vertical_Window_Wall
+    second: {fileID: 2100000, guid: edb730b172c87f84d97029e20ae7afd5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
