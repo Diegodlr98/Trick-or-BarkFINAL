@@ -4,7 +4,7 @@ public class KidAnimation : MonoBehaviour
         
 {
 
-    private Animator anim;
+    public Animator anim;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
