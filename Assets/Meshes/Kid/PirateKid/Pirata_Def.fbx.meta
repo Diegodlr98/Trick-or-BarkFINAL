@@ -3,7 +3,17 @@ guid: bf0d232361913ce4bae7198c74f3504f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: PumpkinLantern-mat.003
+    second: {fileID: 2100000, guid: 145d6495d3b9f264890ee8e5950874e2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: standardSurface1.008
+    second: {fileID: 2100000, guid: 385c414e7d629624c80294a51b94a7bf, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

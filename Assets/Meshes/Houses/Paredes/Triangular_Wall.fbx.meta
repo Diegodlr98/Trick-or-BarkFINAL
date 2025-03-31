@@ -3,7 +3,12 @@ guid: c14841b2786165245af583abf0794c09
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Triangular_Wall-mat
+    second: {fileID: 2100000, guid: e46957cf9e163f842940ec08f4714e9c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

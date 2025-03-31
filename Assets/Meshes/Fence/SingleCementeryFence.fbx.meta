@@ -3,7 +3,12 @@ guid: 62ac1a6e085c0174f9fa4540401b3fee
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Valla_mat
+    second: {fileID: 2100000, guid: 3b2ba2984024e5445a6fc581d83a655d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

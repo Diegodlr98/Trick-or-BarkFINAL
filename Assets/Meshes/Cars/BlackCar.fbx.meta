@@ -3,7 +3,12 @@ guid: b53a56a21dfc8564fb74befe7f4ad5f1
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Black_Car-mat
+    second: {fileID: 2100000, guid: 03da1cc77217e7f4f813599bb0aa71c8, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

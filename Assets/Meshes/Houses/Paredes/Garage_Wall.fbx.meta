@@ -3,7 +3,12 @@ guid: a41de715ff0e8f24294129704cb163ea
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Garage_Wall-mat
+    second: {fileID: 2100000, guid: dd1caf6e6826cee4fa5dfb8ea1ae9600, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

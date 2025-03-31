@@ -28,11 +28,11 @@ public class Animations : MonoBehaviour
     {
         if (moveAction.IsPressed())
         {
-            anim.SetBool("walk", true);
+            anim.SetBool("Move", true);
         }
         else
         {
-            anim.SetBool("walk", false);
+            anim.SetBool("Move", false);
         }
 
         if (jumpAction.WasPressedThisFrame())
