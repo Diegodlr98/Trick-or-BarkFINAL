@@ -3,7 +3,12 @@ guid: 25e6ac73eb73b46419379e50a9d8b9b1
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Big_Low_Roof-mat
+    second: {fileID: 2100000, guid: 3b124879a801ee945b6d8f205e4ea379, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
