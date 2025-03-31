@@ -33,8 +33,10 @@ public class TutorialMessages : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log("Cantidad de chuches: " + player.CandyCount);
+
         // Mensaje para el doble salto (se muestra solo una vez)
-        if (player.CandyCount >= 3 && !doubleJumpMessageShown)
+        if (player.CandyCount >= 15 && !doubleJumpMessageShown)
         {
             doubleJumpMessageShown = true; // Evita que se muestre repetidamente
             ShowMessage("¡Has desbloqueado el DOBLE SALTO!");
@@ -42,7 +44,7 @@ public class TutorialMessages : MonoBehaviour
         }
 
         // Mensaje para el dash (se muestra solo una vez)
-        if (player.CandyCount >= 5 && !dashMessageShown)
+        if (player.CandyCount >= 25 && !dashMessageShown)
         {
             dashMessageShown = true; // Evita que se muestre repetidamente
             ShowMessage("¡Has desbloqueado el DASH! Usa E para impulsarte.");

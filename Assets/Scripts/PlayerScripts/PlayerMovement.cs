@@ -68,14 +68,14 @@ public class PlayerMovement : MonoBehaviour
     {
 
         //con esto se cambia el comportamiento del salto en funcion de las chuches
-        if (CandyCount < 3)
+        if (CandyCount < 15)
         {
             if (jumpAction.WasPressedThisFrame() && controller.isGrounded)
             {
                 velocity = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale)); //calcula el valor de la velocitat inicial para que al decrementarlo posteriormente llegue a la altura indicada                            
             }
         }
-        if (CandyCount >= 3)
+        if (CandyCount >= 15)
         {
             if (jumpAction.WasPressedThisFrame() && jumpCount < 1)
             {
@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
 
         controller.Move(movement * Time.deltaTime);
 
-        if (dashAction.WasPressedThisFrame() && CandyCount >= 5)
+        if (dashAction.WasPressedThisFrame() && CandyCount >= 25)
         {
             StartCoroutine(dashCoroutine());
         }
