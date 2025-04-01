@@ -33,7 +33,7 @@ public class TutorialMessages : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Cantidad de chuches: " + player.CandyCount);
+        
 
         // Mensaje para el doble salto (se muestra solo una vez)
         if (player.CandyCount >= 15 && !doubleJumpMessageShown)

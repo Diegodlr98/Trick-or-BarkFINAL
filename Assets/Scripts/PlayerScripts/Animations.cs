@@ -7,6 +7,7 @@ public class Animations : MonoBehaviour
     //private properties
     private Animator anim;
     public CharacterController characterController;
+    PlayerMovement player;
 
     InputAction moveAction;
     InputAction jumpAction;
@@ -15,6 +16,7 @@ public class Animations : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        player = GetComponent<PlayerMovement>();
         anim = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         moveAction = InputSystem.actions.FindAction("Move");
@@ -49,7 +51,7 @@ public class Animations : MonoBehaviour
             anim.SetBool("sprint", false);
         }
 
-        if (dashAction.WasPressedThisFrame())
+        if (dashAction.WasPressedThisFrame() && player.CandyCount >= 25)
         {
             anim.SetTrigger("Dash");
         }
