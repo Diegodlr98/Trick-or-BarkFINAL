@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Big_Low_Roof-mat
-    second: {fileID: 2100000, guid: 3b124879a801ee945b6d8f205e4ea379, type: 2}
+    second: {fileID: 2100000, guid: 100e842f263619b40802e3a099d8c03a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -203,13 +203,13 @@ public class PlayerMovement : MonoBehaviour
     }
     private IEnumerator PlayMemoryVideo()
     {
-        // Activa el VideoPlayer en la escena
+        // Activa el VideoPlayer antes de esperar
+        memoryVideoPlayer.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(1f);
 
         if (memoryVideoPlayer != null)
         {
-            memoryVideoPlayer.gameObject.SetActive(true);
             memoryVideoPlayer.Play();
 
             // Espera hasta que termine el video
@@ -217,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 yield return null;
             }
-           
+
             SceneManager.LoadScene("Final");
         }
     }
