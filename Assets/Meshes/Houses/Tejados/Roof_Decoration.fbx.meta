@@ -3,7 +3,12 @@ guid: 4c1440c7a2779c9449c528e76ae22a76
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Roof_Decoration-mat
+    second: {fileID: 2100000, guid: f37a8f250b59f664c8afe2e4316b02df, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

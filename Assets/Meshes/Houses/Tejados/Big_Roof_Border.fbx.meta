@@ -3,7 +3,12 @@ guid: 0cdfaaeaced5e3b46848cc5d0d31dec9
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Big_Roof_Border-mat
+    second: {fileID: 2100000, guid: 100e842f263619b40802e3a099d8c03a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
