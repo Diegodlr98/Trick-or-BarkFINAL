@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -27,7 +28,8 @@ public class PlayerMovement : MonoBehaviour
     Vector3 movement; //Coordenades del moviment total
 
     public Image memoryUIImage;
-    public UnityEngine.Video.VideoPlayer memoryVideoPlayer;
+    public GameObject video;
+    public bool reproducir = false;
 
 
     public int speed = 10; //velocitat del personatge
@@ -45,6 +47,9 @@ public class PlayerMovement : MonoBehaviour
     public CandyUI candyUI;
     public MemoryUI memoryUI;
     public GameObject dashIcon;
+
+
+    private VideoPlayer videoPlayer;
     
 
 
@@ -204,22 +209,25 @@ public class PlayerMovement : MonoBehaviour
     private IEnumerator PlayMemoryVideo()
     {
         // Activa el VideoPlayer antes de esperar
-        memoryVideoPlayer.gameObject.SetActive(true);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
 
-        if (memoryVideoPlayer != null)
-        {
-            memoryVideoPlayer.Play();
+        video.gameObject.SetActive(true);       
+        
+        videoPlayer = video.GetComponent<VideoPlayer>();
 
+        if (video != null)
+        {           
             // Espera hasta que termine el video
-            while (memoryVideoPlayer.isPlaying)
+            while (!videoPlayer.isPlaying)
+            {
+                yield return null;                
+            }           
+            while (videoPlayer.isPlaying) 
             {
                 yield return null;
             }
-
             SceneManager.LoadScene("Final");
         }
-    }
-
+    }  
 }
