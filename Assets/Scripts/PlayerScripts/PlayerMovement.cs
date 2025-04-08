@@ -28,9 +28,10 @@ public class PlayerMovement : MonoBehaviour
     Vector3 movement; //Coordenades del moviment total
 
     public Image memoryUIImage;
+    public VideoPlayer memoryPlayer;
     public GameObject video;
     public bool reproducir = false;
-
+    public GameObject UI;
 
     public int speed = 10; //velocitat del personatge
     public int gravityScale = 10;
@@ -190,7 +191,40 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(PlayMemoryVideo());
             }
         }
+        if (other.CompareTag("prueba"))
+        {
+            MemoryVideo videoScript = other.GetComponent<MemoryVideo>();
+            if(videoScript != null) 
+            {
+                StartCoroutine(ShowVideo());
+            }
+            Destroy(other.gameObject);
+            memoryCount++;
+            memoryUI.UpdateMemoryCount(memoryCount);
+        }
         
+    }
+
+    private IEnumerator ShowVideo()
+
+    {
+        Time.timeScale = 0f;
+        memoryPlayer.gameObject.SetActive(true);
+        if (memoryPlayer != null)
+        {
+            // Espera hasta que termine el video
+            while (!memoryPlayer.isPlaying)
+            {
+                yield return null;
+            }
+            while (memoryPlayer.isPlaying)
+            {
+                yield return null;
+            }
+
+        }
+        memoryPlayer.gameObject.SetActive(false);
+        Time.timeScale = 1f;
     }
     private IEnumerator ShowMemorySprite(Sprite sprite)
     {
@@ -210,9 +244,10 @@ public class PlayerMovement : MonoBehaviour
     {
         // Activa el VideoPlayer antes de esperar
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
         video.gameObject.SetActive(true);       
+        UI.gameObject.SetActive(false);
         
         videoPlayer = video.GetComponent<VideoPlayer>();
 

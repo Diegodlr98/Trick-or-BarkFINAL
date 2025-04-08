@@ -12,6 +12,7 @@ TagManager:
   - CarLight
   - car
   - Kid
+  - prueba
   layers:
   - Default
   - TransparentFX
