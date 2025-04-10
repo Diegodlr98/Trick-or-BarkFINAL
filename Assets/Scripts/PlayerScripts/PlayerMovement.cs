@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
     float velocity; //valor coordenada Y en cada momento (altura)    
     Vector3 movement; //Coordenades del moviment total
 
-    public Image memoryUIImage;
+    //public Image memoryUIImage;
     public VideoPlayer memoryPlayer;
     public GameObject video;
     public bool reproducir = false;
@@ -212,6 +212,7 @@ public class PlayerMovement : MonoBehaviour
     private IEnumerator ShowVideo()
 
     {
+        UI.gameObject.SetActive(false);
         Time.timeScale = 0f;
         memoryPlayer.gameObject.SetActive(true);
         if (memoryPlayer != null)
@@ -227,10 +228,11 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
+        UI.gameObject.SetActive(true);
         memoryPlayer.gameObject.SetActive(false);
         Time.timeScale = 1f;
     }
-    private IEnumerator ShowMemorySprite(Sprite sprite)
+    /*private IEnumerator ShowMemorySprite(Sprite sprite)
     {
         Time.timeScale = 0f;
         if (memoryUIImage != null)
@@ -243,7 +245,7 @@ public class PlayerMovement : MonoBehaviour
             memoryUIImage.gameObject.SetActive(false); 
         }
         Time.timeScale = 1f;
-    }
+    }*/
     private IEnumerator PlayMemoryVideo()
     {
         // Activa el VideoPlayer antes de esperar
