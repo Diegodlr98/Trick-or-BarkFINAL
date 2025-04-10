@@ -173,7 +173,7 @@ public class PlayerMovement : MonoBehaviour
 
             candyUI.UpdateCandyCount(CandyCount);
         }
-        if (other.CompareTag("Memory"))
+        /*if (other.CompareTag("Memory"))
         {
             Memory memoryScript = other.GetComponent<Memory>(); // Accede al script de Memory
             if (memoryScript != null)
@@ -190,7 +190,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 StartCoroutine(PlayMemoryVideo());
             }
-        }
+        }*/
         if (other.CompareTag("prueba"))
         {
             MemoryVideo videoScript = other.GetComponent<MemoryVideo>();
@@ -201,6 +201,10 @@ public class PlayerMovement : MonoBehaviour
             Destroy(other.gameObject);
             memoryCount++;
             memoryUI.UpdateMemoryCount(memoryCount);
+            if (memoryCount >= 6)
+            {
+                StartCoroutine(PlayMemoryVideo());
+            }
         }
         
     }
