@@ -49,10 +49,7 @@ public class PlayerMovement : MonoBehaviour
     public MemoryUI memoryUI;
     public GameObject dashIcon;
 
-
     private VideoPlayer videoPlayer;
-    
-
 
     private void Start()
     {
