@@ -157,10 +157,6 @@ public class PlayerMovement : MonoBehaviour
             dashIcon.SetActive(true);
         }
     }
-
-
-
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Candy"))
@@ -170,30 +166,13 @@ public class PlayerMovement : MonoBehaviour
 
             candyUI.UpdateCandyCount(CandyCount);
         }
-        /*if (other.CompareTag("Memory"))
-        {
-            Memory memoryScript = other.GetComponent<Memory>(); // Accede al script de Memory
-            if (memoryScript != null)
-            {
-                StartCoroutine(ShowMemorySprite(memoryScript.memorySprite)); // Muestra el sprite
-            }
-
-            Destroy(other.gameObject);
-            memoryCount++;
-            memoryUI.UpdateMemoryCount(memoryCount);
-
-            // Si recoge los 6, muestra el video
-            if (memoryCount >= 6)
-            {
-                StartCoroutine(PlayMemoryVideo());
-            }
-        }*/
+       
         if (other.CompareTag("prueba"))
         {
             MemoryVideo videoScript = other.GetComponent<MemoryVideo>();
             if(videoScript != null) 
             {
-                StartCoroutine(ShowVideo());
+                StartCoroutine(other.GetComponent<MemoryVideo>().playMemory());
             }
             Destroy(other.gameObject);
             memoryCount++;
@@ -205,44 +184,7 @@ public class PlayerMovement : MonoBehaviour
         }
         
     }
-
-    private IEnumerator ShowVideo()
-
-    {
-        UI.gameObject.SetActive(false);
-        Time.timeScale = 0f;
-        memoryPlayer.gameObject.SetActive(true);
-        if (memoryPlayer != null)
-        {
-            // Espera hasta que termine el video
-            while (!memoryPlayer.isPlaying)
-            {
-                yield return null;
-            }
-            while (memoryPlayer.isPlaying)
-            {
-                yield return null;
-            }
-
-        }
-        UI.gameObject.SetActive(true);
-        memoryPlayer.gameObject.SetActive(false);
-        Time.timeScale = 1f;
-    }
-    /*private IEnumerator ShowMemorySprite(Sprite sprite)
-    {
-        Time.timeScale = 0f;
-        if (memoryUIImage != null)
-        {
-            memoryUIImage.sprite = sprite; // Cambia el sprite en la UI al que tenga el objeto que se recoge
-            memoryUIImage.gameObject.SetActive(true); 
-
-            yield return new WaitForSecondsRealtime(2f); // Muestra el sprite por 2 segundos
-
-            memoryUIImage.gameObject.SetActive(false); 
-        }
-        Time.timeScale = 1f;
-    }*/
+    
     private IEnumerator PlayMemoryVideo()
     {
         // Activa el VideoPlayer antes de esperar

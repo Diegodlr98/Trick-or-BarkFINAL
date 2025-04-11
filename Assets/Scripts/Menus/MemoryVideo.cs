@@ -9,8 +9,10 @@ public class MemoryVideo : MonoBehaviour
 
     public VideoPlayer player;
 
-    private IEnumerator playMemory()
+    public IEnumerator playMemory()
     {
+        Time.timeScale = 0;
+        memory.SetActive(true);
         player = memory.GetComponent<VideoPlayer>();
         if (player != null)
         {
@@ -25,5 +27,7 @@ public class MemoryVideo : MonoBehaviour
             }
             
         }
+        Time.timeScale = 1;
+        memory.SetActive(false);
     }
 }
