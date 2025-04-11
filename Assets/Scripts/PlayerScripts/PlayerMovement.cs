@@ -26,9 +26,7 @@ public class PlayerMovement : MonoBehaviour
 
     float velocity; //valor coordenada Y en cada momento (altura)    
     Vector3 movement; //Coordenades del moviment total
-
-    //public Image memoryUIImage;
-    public VideoPlayer memoryPlayer;
+        
     public GameObject video;
     public bool reproducir = false;
     public GameObject UI;

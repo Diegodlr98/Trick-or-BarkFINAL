@@ -233,7 +233,7 @@ Material:
     - _AlphaCutoffPrepass: 0.5
     - _AlphaCutoffShadow: 0.5
     - _AlphaDstBlend: 10
-    - _AlphaRemapMax: 1
+    - _AlphaRemapMax: 0.3853211
     - _AlphaRemapMin: 0
     - _AlphaSrcBlend: 1
     - _AngelRing: 0
@@ -293,8 +293,8 @@ Material:
     - _DstBlend2: 10
     - _EMISSIVE: 0
     - _EmissiveColorMode: 1
-    - _EmissiveExposureWeight: 1
-    - _EmissiveIntensity: 1
+    - _EmissiveExposureWeight: 0
+    - _EmissiveIntensity: 0.15
     - _EmissiveIntensityUnit: 0
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
@@ -486,8 +486,8 @@ Material:
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 0.15}
+    - _EmissiveColorLDR: {r: 0.03127098, g: 1, b: 0, a: 1}
     - _Emissive_Color: {r: 0, g: 0, b: 0, a: 1}
     - _FirstShadeMaskColor: {r: 0, g: 1, b: 1, a: 1}
     - _HighColor: {r: 0.72828406, g: 0.8583296, b: 0.9245283, a: 1}

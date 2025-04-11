@@ -10,8 +10,7 @@ public class fenceBehaviour : MonoBehaviour
 
     private void Start()
     {
-      int memoryCount = playerMovement.memoryCount;
-      FenceRotation();
+      int memoryCount = playerMovement.memoryCount;     
     }
     void Update()
     {

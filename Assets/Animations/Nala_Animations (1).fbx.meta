@@ -3,7 +3,22 @@ guid: 3d3780739627af644a8284bd199f7d94
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Body
+    second: {fileID: 2100000, guid: 61879871c67630c4b949fd5bda2661a9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cristalino
+    second: {fileID: 2100000, guid: 8ded5cb03acdd8a408d5b00cace4a359, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Details
+    second: {fileID: 2100000, guid: ec8960042dcc95247a7197a528e340fb, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

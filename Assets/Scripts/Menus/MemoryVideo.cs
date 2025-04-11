@@ -8,7 +8,7 @@ public class MemoryVideo : MonoBehaviour
     public GameObject memory;
 
     public VideoPlayer player;
-
+    public System.Action OnMemoryVideoComplete;
     public IEnumerator playMemory()
     {
         Time.timeScale = 0;
@@ -29,5 +29,7 @@ public class MemoryVideo : MonoBehaviour
         }
         Time.timeScale = 1;
         memory.SetActive(false);
+
+        OnMemoryVideoComplete?.Invoke();
     }
 }
