@@ -13,8 +13,7 @@ public class PlayerMovement : MonoBehaviour
     //private properties
 
     CharacterController controller;
-    private bool canDash = true;
-    
+    private bool canDash = true;   
     
     //accions del mando/teclat
 
