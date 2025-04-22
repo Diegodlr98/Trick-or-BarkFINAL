@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
@@ -10,29 +11,27 @@ using UnityEngine.Video;
 
 public class PlayerMovement : MonoBehaviour
 {
-    //private properties
-
+    // Private properties
     CharacterController controller;
-    private bool canDash = true;   
-    
-    //accions del mando/teclat
+    private bool canDash = true;
 
+    // Acciones del mando/teclado
     InputAction moveAction;
     InputAction jumpAction;
     InputAction sprintAction;
     InputAction rotAction;
     InputAction dashAction;
 
-    float velocity; //valor coordenada Y en cada momento (altura)    
-    Vector3 movement; //Coordenades del moviment total
-        
+    float velocity; // valor coordenada Y en cada momento (altura)
+    Vector3 movement; // Coordenadas del movimiento total
+
     public GameObject video;
     public bool reproducir = false;
     public GameObject UI;
 
-    public int speed = 10; //velocitat del personatge
+    public int speed = 10;
     public int gravityScale = 10;
-    public float jumpHeight = 2f;      
+    public float jumpHeight = 2f;
     public int jumpCount = 0;
     public int maxJump = 1;
     public int sprint = 0;
@@ -48,6 +47,11 @@ public class PlayerMovement : MonoBehaviour
 
     private VideoPlayer videoPlayer;
 
+    // NUEVAS VARIABLES para caída suave
+    public float fallAcceleration = 2f;
+    public float maxFallSpeed = -50f;
+    private float fallVelocity = 0f;
+
     private void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -59,23 +63,20 @@ public class PlayerMovement : MonoBehaviour
 
         candyUI.UpdateCandyCount(CandyCount);
         memoryUI.UpdateMemoryCount(memoryCount);
-
         UpdateDashIconVisibility();
-               
     }
 
     private void Update()
     {
-
-        //con esto se cambia el comportamiento del salto en funcion de las chuches
+        // Salto
         if (CandyCount < 15)
         {
             if (jumpAction.WasPressedThisFrame() && controller.isGrounded)
             {
-                velocity = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale)); //calcula el valor de la velocitat inicial para que al decrementarlo posteriormente llegue a la altura indicada                            
+                velocity = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
             }
         }
-        if (CandyCount >= 15)
+        else
         {
             if (jumpAction.WasPressedThisFrame() && jumpCount < 1)
             {
@@ -87,8 +88,32 @@ public class PlayerMovement : MonoBehaviour
                 jumpCount = 0;
             }
         }
-        velocity += -9.8f * gravityScale * Time.deltaTime; //decremento de la velocidad
 
+        // CAÍDA SUAVIZADA
+        if (controller.isGrounded && velocity < 0)
+        {
+            fallVelocity = 0f;
+            velocity = -1f; // pequeña presión hacia abajo
+        }
+        else
+        {
+            // Aceleración progresiva de caída
+            if (velocity < 0 && !jumpAction.WasPressedThisFrame())
+            {
+                fallVelocity += fallAcceleration * 1.5f * Time.deltaTime;
+            }
+            else
+            {
+                fallVelocity += fallAcceleration * Time.deltaTime;
+            }
+
+            velocity += -9.8f * gravityScale * fallVelocity * Time.deltaTime;
+
+            if (velocity < maxFallSpeed)
+                velocity = maxFallSpeed;
+        }
+
+        // Sprint
         if (sprintAction.IsPressed() && controller.isGrounded)
         {
             sprint = 2;
@@ -97,44 +122,50 @@ public class PlayerMovement : MonoBehaviour
         {
             sprint = 1;
         }
-        //movimiento con rotacion en raton
-        Vector2 lookInput = rotAction.ReadValue<Vector2>(); // obtiene la rotacion
+
+        // Rotación con ratón
+        Vector2 lookInput = rotAction.ReadValue<Vector2>();
         float horizontalRotation = lookInput.x * rotationSpeed * Time.deltaTime;
-        transform.Rotate(0f, horizontalRotation, 0f); // Gira al player
-        movement = velocity * Vector3.up + moveAction.ReadValue<Vector2>().x * transform.right * speed + moveAction.ReadValue<Vector2>().y * speed * sprint * transform.forward;
+        transform.Rotate(0f, horizontalRotation, 0f);
+
+        // Movimiento general
+        movement = velocity * Vector3.up +
+                   moveAction.ReadValue<Vector2>().x * transform.right * speed +
+                   moveAction.ReadValue<Vector2>().y * speed * sprint * transform.forward;
 
         controller.Move(movement * Time.deltaTime);
 
+        // Dash
         if (dashAction.WasPressedThisFrame() && CandyCount >= 25)
         {
             StartCoroutine(dashCoroutine());
         }
     }
 
-        private void UpdateDashIconVisibility()
+    private void UpdateDashIconVisibility()
+    {
+        if (dashIcon != null)
         {
-            if (dashIcon != null)
+            if (CandyCount >= 5 && canDash)
             {
-                if (CandyCount >= 5 && canDash)
-                {
-                    dashIcon.SetActive(true); // muestra el icono cuando hay suficientes chuches
-                }
-                else
-                {
-                    dashIcon.SetActive(false); // Oculta el icono hasta que se consiguen las suficientes chuches
-                }
+                dashIcon.SetActive(true);
+            }
+            else
+            {
+                dashIcon.SetActive(false);
             }
         }
-    
+    }
+
     private IEnumerator dashCoroutine()
     {
         if (!canDash) yield break;
 
-        canDash = false; //el dash se bloquea mientras se ejecuta
+        canDash = false;
         float startTime = Time.time;
         Vector3 dashDirection = transform.forward;
 
-        if(dashIcon != null)
+        if (dashIcon != null)
         {
             dashIcon.SetActive(false);
         }
@@ -143,31 +174,30 @@ public class PlayerMovement : MonoBehaviour
         {
             controller.Move(dashDirection * Time.deltaTime * dashSpeed);
             yield return null;
-            
-           
         }
-        yield return new WaitForSeconds(dashCooldown); //espera el cooldown antes de activarlo
-        canDash = true; //el dash se habilita de nuevo
-                       
+
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
+
         if (dashIcon != null)
         {
             dashIcon.SetActive(true);
         }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Candy"))
         {
             Destroy(other.gameObject);
             CandyCount++;
-
             candyUI.UpdateCandyCount(CandyCount);
         }
-       
+
         if (other.CompareTag("prueba"))
         {
             MemoryVideo videoScript = other.GetComponent<MemoryVideo>();
-            if(videoScript != null) 
+            if (videoScript != null)
             {
                 StartCoroutine(other.GetComponent<MemoryVideo>().playMemory());
             }
@@ -179,32 +209,31 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(PlayMemoryVideo());
             }
         }
-        
     }
-    
+
     private IEnumerator PlayMemoryVideo()
     {
-        // Activa el VideoPlayer antes de esperar
-
         yield return new WaitForSeconds(2f);
 
-        video.gameObject.SetActive(true);       
+        video.gameObject.SetActive(true);
         UI.gameObject.SetActive(false);
-        
+
         videoPlayer = video.GetComponent<VideoPlayer>();
 
         if (video != null)
-        {           
-            // Espera hasta que termine el video
+        {
             while (!videoPlayer.isPlaying)
-            {
-                yield return null;                
-            }           
-            while (videoPlayer.isPlaying) 
             {
                 yield return null;
             }
+
+            while (videoPlayer.isPlaying)
+            {
+                yield return null;
+            }
+
             SceneManager.LoadScene("Final");
         }
-    }  
+    }
 }
+
