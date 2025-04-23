@@ -1,8 +1,4 @@
-
-using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
-using Unity.XR.GoogleVr;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -11,19 +7,16 @@ using UnityEngine.Video;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Private properties
     CharacterController controller;
     private bool canDash = true;
 
-    // Acciones del mando/teclado
     InputAction moveAction;
     InputAction jumpAction;
     InputAction sprintAction;
-    InputAction rotAction;
     InputAction dashAction;
 
-    float velocity; // valor coordenada Y en cada momento (altura)
-    Vector3 movement; // Coordenadas del movimiento total
+    float velocity;
+    Vector3 movement;
 
     public GameObject video;
     public bool reproducir = false;
@@ -39,36 +32,38 @@ public class PlayerMovement : MonoBehaviour
     public float dashCooldown = 1f;
     public float dashTime = 1;
     public float dashSpeed = 10;
-    public float rotationSpeed = 100;
     public int memoryCount = 0;
+    public float rotationSpeed = 5f;
     public CandyUI candyUI;
     public MemoryUI memoryUI;
     public GameObject dashIcon;
 
     private VideoPlayer videoPlayer;
 
-    // NUEVAS VARIABLES para caída suave
     public float fallAcceleration = 2f;
     public float maxFallSpeed = -50f;
     private float fallVelocity = 0f;
+
+    private Transform cam;
 
     private void Start()
     {
         controller = GetComponent<CharacterController>();
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
-        rotAction = InputSystem.actions.FindAction("Look");
         sprintAction = InputSystem.actions.FindAction("Sprint");
         dashAction = InputSystem.actions.FindAction("Dash");
 
         candyUI.UpdateCandyCount(CandyCount);
         memoryUI.UpdateMemoryCount(memoryCount);
         UpdateDashIconVisibility();
+
+        cam = Camera.main.transform;
     }
 
     private void Update()
     {
-        // Salto
+        // Saltar
         if (CandyCount < 15)
         {
             if (jumpAction.WasPressedThisFrame() && controller.isGrounded)
@@ -89,15 +84,14 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // CAÍDA SUAVIZADA
+        // Caída suavizada
         if (controller.isGrounded && velocity < 0)
         {
             fallVelocity = 0f;
-            velocity = -1f; // pequeña presión hacia abajo
+            velocity = -1f;
         }
         else
         {
-            // Aceleración progresiva de caída
             if (velocity < 0 && !jumpAction.WasPressedThisFrame())
             {
                 fallVelocity += fallAcceleration * 1.5f * Time.deltaTime;
@@ -114,24 +108,29 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Sprint
-        if (sprintAction.IsPressed() && controller.isGrounded)
+        sprint = (sprintAction.IsPressed() && controller.isGrounded) ? 2 : 1;
+
+        // Movimiento estilo tercera persona
+        Vector2 input = moveAction.ReadValue<Vector2>();
+        Vector3 camForward = cam.forward;
+        camForward.y = 0;
+        camForward.Normalize();
+
+        Vector3 camRight = cam.right;
+        camRight.y = 0;
+        camRight.Normalize();
+
+        Vector3 moveDir = (camForward * input.y + camRight * input.x).normalized;
+
+        if (moveDir != Vector3.zero)
         {
-            sprint = 2;
-        }
-        else
-        {
-            sprint = 1;
+            // Rotar suavemente hacia dirección de movimiento
+            Quaternion toRotation = Quaternion.LookRotation(moveDir, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
         }
 
-        // Rotación con ratón
-        Vector2 lookInput = rotAction.ReadValue<Vector2>();
-        float horizontalRotation = lookInput.x * rotationSpeed * Time.deltaTime;
-        transform.Rotate(0f, horizontalRotation, 0f);
-
-        // Movimiento general
-        movement = velocity * Vector3.up +
-                   moveAction.ReadValue<Vector2>().x * transform.right * speed +
-                   moveAction.ReadValue<Vector2>().y * speed * sprint * transform.forward;
+        float currentSpeed = (input.y < 0) ? speed * 0.7f : speed;
+        movement = moveDir * currentSpeed * sprint + velocity * Vector3.up;
 
         controller.Move(movement * Time.deltaTime);
 
@@ -146,14 +145,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (dashIcon != null)
         {
-            if (CandyCount >= 5 && canDash)
-            {
-                dashIcon.SetActive(true);
-            }
-            else
-            {
-                dashIcon.SetActive(false);
-            }
+            dashIcon.SetActive(CandyCount >= 5 && canDash);
         }
     }
 
@@ -236,4 +228,3 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 }
-
