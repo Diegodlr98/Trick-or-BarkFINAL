@@ -4,76 +4,98 @@ using System;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHealth = 3;  // Salud máxima del jugador
-    private int currentHealth;  // Salud actual del jugador
-    public HealthUI healthUI;   // UI para mostrar la salud
-    public GameObject gameOver; // Game over panel
+    public int maxHealth = 3;
+    private int currentHealth;
+    public HealthUI healthUI;
+    public GameObject gameOver;
 
-    private bool canTakeDamage = true; // Determina si el jugador puede recibir daño
-    public bool gameover = false; // Si el juego ha terminado
-    public float invulnerabilityTime = 2f; // Tiempo de invulnerabilidad en segundos
+    private bool canTakeDamage = true;
+    public bool gameover = false;
+    public float invulnerabilityTime = 2f;
 
-    public static event Action OnPlayerDamaged; // Evento que notifica daño
+    public static event Action OnPlayerDamaged;
+
+    [Header("Light Feedback")]
+    public Light playerLight; //  Referencia a la luz
+    public Color damageColor = Color.red; //  Color al recibir daño
+    private Color originalLightColor; //  Guardamos el color original
 
     void Start()
     {
-        currentHealth = maxHealth; // Inicializa la salud
-        healthUI.SetMaxHearts(maxHealth); // Configura la UI
+        currentHealth = maxHealth;
+        healthUI.SetMaxHearts(maxHealth);
+
+        if (playerLight != null)
+        {
+            originalLightColor = playerLight.color; // Guardamos el color original al inicio
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Si el jugador entra en el collider de "Light", y puede recibir daño, toma daño
         if (other.CompareTag("Light") && canTakeDamage)
         {
             TakeLightDamage();
         }
-        // Si el jugador entra en el collider de "car", toma daño sin invulnerabilidad
         else if (other.CompareTag("car"))
         {
-            TakeDamage(); // El daño de "car" ignora la invulnerabilidad
+            TakeDamage();
         }
     }
 
     private void TakeLightDamage()
     {
-        currentHealth -= 1; // Resta una vida por daño ligero
-        healthUI.UpdateHearts(currentHealth); // Actualiza la UI de salud
-        OnPlayerDamaged?.Invoke(); // Invoca el evento de daño para notificar a los niños
+        currentHealth -= 1;
+        healthUI.UpdateHearts(currentHealth);
+        OnPlayerDamaged?.Invoke();
 
-        StartCoroutine(InvulnerabilityCooldown()); // Activa la invulnerabilidad temporal
+        StartCoroutine(InvulnerabilityCooldown());
 
         if (currentHealth <= 0)
         {
-            GameOver(); // Si la salud es 0 o menos, el juego termina
+            GameOver();
         }
     }
 
     private void TakeDamage()
     {
-        currentHealth -= 3; // Resta 3 vidas por daño más severo
-        healthUI.UpdateHearts(currentHealth); // Actualiza la UI de salud
-        OnPlayerDamaged?.Invoke(); // Invoca el evento de daño para notificar a los niños
+        currentHealth -= 3;
+        healthUI.UpdateHearts(currentHealth);
+        OnPlayerDamaged?.Invoke();
 
         if (currentHealth <= 0)
         {
-            GameOver(); // Si la salud es 0 o menos, el juego termina
+            GameOver();
         }
     }
 
     private IEnumerator InvulnerabilityCooldown()
     {
-        canTakeDamage = false; // Desactiva la capacidad de recibir más daño
-        yield return new WaitForSeconds(invulnerabilityTime); // Espera el tiempo de invulnerabilidad
-        canTakeDamage = true; // Vuelve a permitir que el jugador reciba daño
+        canTakeDamage = false;
+
+        // Cambiamos el color de la luz al de daño
+        if (playerLight != null)
+        {
+            playerLight.color = damageColor;
+        }
+
+        yield return new WaitForSeconds(invulnerabilityTime);
+
+        //  Restauramos el color original
+        if (playerLight != null)
+        {
+            playerLight.color = originalLightColor;
+        }
+
+        canTakeDamage = true;
     }
 
     private void GameOver()
     {
-        gameOver.SetActive(true); // Muestra la pantalla de Game Over
+        gameOver.SetActive(true);
         gameover = true;
-        Time.timeScale = 0f; // Detiene el tiempo (pausa el juego)
-        Cursor.visible = true; // Muestra el cursor
-        Cursor.lockState = CursorLockMode.None; // Libera el cursor
+        Time.timeScale = 0f;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 }
