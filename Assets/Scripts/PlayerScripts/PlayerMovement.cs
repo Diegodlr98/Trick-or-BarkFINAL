@@ -15,40 +15,42 @@ public class PlayerMovement : MonoBehaviour
     InputAction sprintAction;
     InputAction dashAction;
 
-    float velocity;
+    float velocityY;
     Vector3 movement;
 
+    public Transform cameraTransform;
+
     public GameObject video;
-    public bool reproducir = false;
     public GameObject UI;
+    public GameObject dashIcon;
 
     public int speed = 10;
     public int gravityScale = 10;
     public float jumpHeight = 2f;
-    public int jumpCount = 0;
-    public int maxJump = 1;
-    public int sprint = 0;
-    public int CandyCount = 0;
-    public float dashCooldown = 1f;
-    public float dashTime = 1;
-    public float dashSpeed = 10;
-    public int memoryCount = 0;
-    public float rotationSpeed = 5f;
-    public CandyUI candyUI;
-    public MemoryUI memoryUI;
-    public GameObject dashIcon;
-
-    private VideoPlayer videoPlayer;
-
     public float fallAcceleration = 2f;
     public float maxFallSpeed = -50f;
     private float fallVelocity = 0f;
 
-    private Transform cam;
+    public float rotationSpeed = 5f;
+    public float dashCooldown = 1f;
+    public float dashTime = 1f;
+    public float dashSpeed = 10f;
 
-    private void Start()
+    public int maxJump = 1;
+    public int CandyCount = 0;
+    public int memoryCount = 0;
+
+    public CandyUI candyUI;
+    public MemoryUI memoryUI;
+
+    private int jumpCount = 0;
+    private int sprintMultiplier = 1;
+    private VideoPlayer videoPlayer;
+
+    void Start()
     {
         controller = GetComponent<CharacterController>();
+
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
         sprintAction = InputSystem.actions.FindAction("Sprint");
@@ -57,127 +59,129 @@ public class PlayerMovement : MonoBehaviour
         candyUI.UpdateCandyCount(CandyCount);
         memoryUI.UpdateMemoryCount(memoryCount);
         UpdateDashIconVisibility();
-
-        cam = Camera.main.transform;
     }
 
-    private void Update()
+    void Update()
     {
-        // Saltar
-        if (CandyCount < 15)
+        HandleJump();
+        HandleGravity();
+        HandleSprint();
+        HandleMovement();
+        HandleDash();
+    }
+
+    void HandleJump()
+    {
+        if (jumpAction.WasPressedThisFrame())
         {
-            if (jumpAction.WasPressedThisFrame() && controller.isGrounded)
+            if (CandyCount < 15 && controller.isGrounded)
             {
-                velocity = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
+                velocityY = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
             }
-        }
-        else
-        {
-            if (jumpAction.WasPressedThisFrame() && jumpCount < 1)
+            else if (CandyCount >= 15 && jumpCount < maxJump)
             {
-                velocity = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
+                velocityY = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
                 jumpCount++;
             }
-            if (controller.isGrounded)
-            {
-                jumpCount = 0;
-            }
         }
 
-        // Caída suavizada
-        if (controller.isGrounded && velocity < 0)
+        if (controller.isGrounded)
+        {
+            jumpCount = 0;
+        }
+    }
+
+    void HandleGravity()
+    {
+        if (controller.isGrounded && velocityY < 0)
         {
             fallVelocity = 0f;
-            velocity = -1f;
+            velocityY = -1f;
         }
         else
         {
-            if (velocity < 0 && !jumpAction.WasPressedThisFrame())
-            {
-                fallVelocity += fallAcceleration * 1.5f * Time.deltaTime;
-            }
-            else
-            {
-                fallVelocity += fallAcceleration * Time.deltaTime;
-            }
-
-            velocity += -9.8f * gravityScale * fallVelocity * Time.deltaTime;
-
-            if (velocity < maxFallSpeed)
-                velocity = maxFallSpeed;
+            fallVelocity += fallAcceleration * Time.deltaTime;
+            velocityY += -9.8f * gravityScale * fallVelocity * Time.deltaTime;
+            velocityY = Mathf.Max(velocityY, maxFallSpeed);
         }
+    }
 
-        // Sprint
-        sprint = (sprintAction.IsPressed() && controller.isGrounded) ? 2 : 1;
+    void HandleSprint()
+    {
+        sprintMultiplier = (sprintAction.IsPressed() && controller.isGrounded) ? 2 : 1;
+    }
 
-        // Movimiento estilo tercera persona
+    void HandleMovement()
+    {
         Vector2 input = moveAction.ReadValue<Vector2>();
-        Vector3 camForward = cam.forward;
-        camForward.y = 0;
-        camForward.Normalize();
 
-        Vector3 camRight = cam.right;
-        camRight.y = 0;
-        camRight.Normalize();
-
-        Vector3 moveDir = (camForward * input.y + camRight * input.x).normalized;
-
-        if (moveDir != Vector3.zero)
+        if (input.sqrMagnitude > 0.01f)
         {
-            // Rotar suavemente hacia dirección de movimiento
-            Quaternion toRotation = Quaternion.LookRotation(moveDir, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
-        }
+            // Dirección relativa a la cámara
+            Vector3 camForward = cameraTransform.forward;
+            Vector3 camRight = cameraTransform.right;
+            camForward.y = 0;
+            camRight.y = 0;
+            camForward.Normalize();
+            camRight.Normalize();
 
-        float currentSpeed = (input.y < 0) ? speed * 0.7f : speed;
-        movement = moveDir * currentSpeed * sprint + velocity * Vector3.up;
+            Vector3 moveDir = camForward * input.y + camRight * input.x;
+            moveDir.Normalize();
+
+            // Movimiento del personaje
+            Vector3 horizontalMove = moveDir * speed * sprintMultiplier;
+            movement = horizontalMove + Vector3.up * velocityY;
+
+            // Rotación suave hacia dirección de movimiento
+            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+        else
+        {
+            movement = Vector3.up * velocityY;
+        }
 
         controller.Move(movement * Time.deltaTime);
+    }
 
-        // Dash
-        if (dashAction.WasPressedThisFrame() && CandyCount >= 25)
+
+    void HandleDash()
+    {
+        if (dashAction.WasPressedThisFrame() && CandyCount >= 25 && canDash)
         {
-            StartCoroutine(dashCoroutine());
+            StartCoroutine(DashCoroutine());
         }
     }
 
-    private void UpdateDashIconVisibility()
+    IEnumerator DashCoroutine()
     {
-        if (dashIcon != null)
-        {
-            dashIcon.SetActive(CandyCount >= 5 && canDash);
-        }
-    }
-
-    private IEnumerator dashCoroutine()
-    {
-        if (!canDash) yield break;
-
         canDash = false;
-        float startTime = Time.time;
         Vector3 dashDirection = transform.forward;
 
-        if (dashIcon != null)
-        {
-            dashIcon.SetActive(false);
-        }
+        UpdateDashIconVisibility(false);
 
-        while (Time.time < startTime + dashTime)
+        float elapsedTime = 0f;
+        while (elapsedTime < dashTime)
         {
-            controller.Move(dashDirection * Time.deltaTime * dashSpeed);
+            controller.Move(dashDirection * dashSpeed * Time.deltaTime);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
+        UpdateDashIconVisibility(true);
+    }
 
+    void UpdateDashIconVisibility(bool show = true)
+    {
         if (dashIcon != null)
         {
-            dashIcon.SetActive(true);
+            dashIcon.SetActive(CandyCount >= 5 && canDash && show);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Candy"))
         {
@@ -191,40 +195,33 @@ public class PlayerMovement : MonoBehaviour
             MemoryVideo videoScript = other.GetComponent<MemoryVideo>();
             if (videoScript != null)
             {
-                StartCoroutine(other.GetComponent<MemoryVideo>().playMemory());
+                StartCoroutine(videoScript.playMemory());
             }
+
             Destroy(other.gameObject);
             memoryCount++;
             memoryUI.UpdateMemoryCount(memoryCount);
+
             if (memoryCount >= 6)
-            {
                 StartCoroutine(PlayMemoryVideo());
-            }
         }
     }
 
-    private IEnumerator PlayMemoryVideo()
+    IEnumerator PlayMemoryVideo()
     {
         yield return new WaitForSeconds(2f);
 
-        video.gameObject.SetActive(true);
-        UI.gameObject.SetActive(false);
+        video.SetActive(true);
+        UI.SetActive(false);
 
         videoPlayer = video.GetComponent<VideoPlayer>();
 
-        if (video != null)
-        {
-            while (!videoPlayer.isPlaying)
-            {
-                yield return null;
-            }
+        while (!videoPlayer.isPlaying)
+            yield return null;
 
-            while (videoPlayer.isPlaying)
-            {
-                yield return null;
-            }
+        while (videoPlayer.isPlaying)
+            yield return null;
 
-            SceneManager.LoadScene("Final");
-        }
+        SceneManager.LoadScene("Final");
     }
 }
