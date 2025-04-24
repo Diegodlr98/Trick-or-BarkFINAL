@@ -99,6 +99,9 @@ public class PlayerMovement : MonoBehaviour
     }
     void HandleGravity()
     {
+        if (isDashing)
+            return;
+
         if (controller.isGrounded && velocityY < 0)
         {
             fallVelocity = 0f;
@@ -111,6 +114,7 @@ public class PlayerMovement : MonoBehaviour
             velocityY = Mathf.Max(velocityY, maxFallSpeed);
         }
     }
+
 
     void HandleSprint()
     {
@@ -136,7 +140,8 @@ public class PlayerMovement : MonoBehaviour
 
             // Movimiento del personaje
             Vector3 horizontalMove = moveDir * speed * sprintMultiplier;
-            movement = horizontalMove + Vector3.up * velocityY;
+            movement = horizontalMove + (isDashing ? Vector3.zero : Vector3.up * velocityY);
+
 
             if (!isDashing)
             {
