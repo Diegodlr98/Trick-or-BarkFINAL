@@ -9,12 +9,10 @@ public class PlayerMovement : MonoBehaviour
 {
     CharacterController controller;
     private bool canDash = true;
-
     InputAction moveAction;
     InputAction jumpAction;
     InputAction sprintAction;
     InputAction dashAction;
-
     float velocityY;
     Vector3 movement;
 
@@ -43,9 +41,12 @@ public class PlayerMovement : MonoBehaviour
     public CandyUI candyUI;
     public MemoryUI memoryUI;
 
-    private int jumpCount = 0;
+    public int jumpCount = 0;
     private int sprintMultiplier = 1;
     private VideoPlayer videoPlayer;
+    private bool isDashing = false;
+    private Quaternion dashRotation; // guarda la rotación al iniciar el dash
+
 
     void Start()
     {
@@ -72,25 +73,30 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleJump()
     {
+        if (controller.isGrounded)
+        {
+            // Siempre reinicia el salto cuando está en el suelo
+            jumpCount = 0;
+            fallVelocity = 0f;
+        }
+
         if (jumpAction.WasPressedThisFrame())
         {
-            if (CandyCount < 15 && controller.isGrounded)
+            if (controller.isGrounded)
             {
+                // Primer salto desde el suelo
                 velocityY = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
+                jumpCount = 1;
             }
             else if (CandyCount >= 15 && jumpCount < maxJump)
             {
+                // Segundo salto en el aire (doble salto)
                 velocityY = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
+                fallVelocity = 0f; // IMPORTANTE: resetea caída acumulada
                 jumpCount++;
             }
         }
-
-        if (controller.isGrounded)
-        {
-            jumpCount = 0;
-        }
     }
-
     void HandleGravity()
     {
         if (controller.isGrounded && velocityY < 0)
@@ -132,19 +138,24 @@ public class PlayerMovement : MonoBehaviour
             Vector3 horizontalMove = moveDir * speed * sprintMultiplier;
             movement = horizontalMove + Vector3.up * velocityY;
 
-            // Rotación suave hacia dirección de movimiento
-            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            if (!isDashing)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            }
+            else
+            {
+                // Mantiene la rotación fija durante el dash
+                transform.rotation = dashRotation;
+            }
+
         }
         else
         {
             movement = Vector3.up * velocityY;
         }
-
         controller.Move(movement * Time.deltaTime);
     }
-
-
     void HandleDash()
     {
         if (dashAction.WasPressedThisFrame() && CandyCount >= 25 && canDash)
@@ -152,12 +163,13 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(DashCoroutine());
         }
     }
-
     IEnumerator DashCoroutine()
     {
         canDash = false;
-        Vector3 dashDirection = transform.forward;
+        isDashing = true;
+        dashRotation = transform.rotation; // GUARDAMOS LA ROTACIÓN ACTUAL
 
+        Vector3 dashDirection = transform.forward;
         UpdateDashIconVisibility(false);
 
         float elapsedTime = 0f;
@@ -168,10 +180,12 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
+        isDashing = false;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
         UpdateDashIconVisibility(true);
     }
+
 
     void UpdateDashIconVisibility(bool show = true)
     {
@@ -180,7 +194,6 @@ public class PlayerMovement : MonoBehaviour
             dashIcon.SetActive(CandyCount >= 5 && canDash && show);
         }
     }
-
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Candy"))
@@ -206,7 +219,6 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(PlayMemoryVideo());
         }
     }
-
     IEnumerator PlayMemoryVideo()
     {
         yield return new WaitForSeconds(2f);
@@ -223,5 +235,9 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
 
         SceneManager.LoadScene("Final");
+    }
+    public bool IsDashing()
+    {
+        return isDashing;
     }
 }

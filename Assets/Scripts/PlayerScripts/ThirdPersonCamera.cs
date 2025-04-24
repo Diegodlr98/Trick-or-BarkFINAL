@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
+
+    public PlayerMovement playerMovement; //  Asignar desde el Inspector
     public Transform target; // El jugador
     public Vector3 offset = new Vector3(0, 2, -5);
     public float sensitivity = 5f;
@@ -21,31 +23,44 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        // Movimiento del mouse
-        Vector2 mouseInput = Mouse.current.delta.ReadValue() * sensitivity * Time.deltaTime;
-        yaw += mouseInput.x;
-        pitch -= mouseInput.y;
-        pitch = Mathf.Clamp(pitch, minY, maxY);
+        bool isDashing = playerMovement != null && playerMovement.IsDashing();
 
-        // Rotación
-        Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
-        Vector3 targetPosition = target.position - rotation * Vector3.forward * distance + Vector3.up * offset.y;
-
-        // Raycast para detectar obstáculos
-        RaycastHit hit;
-        Vector3 direction = (targetPosition - target.position).normalized;
-
-        if (Physics.Raycast(target.position + Vector3.up * 1.5f, direction, out hit, distance))
+        if (!isDashing)
         {
-            // Colisión detectada, acercar la cámara
-            transform.position = hit.point - direction * 0.2f;
+            // Solo mover la cámara con el mouse si NO está en dash
+            Vector2 mouseInput = Mouse.current.delta.ReadValue() * sensitivity * Time.deltaTime;
+            yaw += mouseInput.x;
+            pitch -= mouseInput.y;
+            pitch = Mathf.Clamp(pitch, minY, maxY);
+        }
+
+        // Rotación actual (mantiene la última vista si está en dash)
+        Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
+        Vector3 desiredPosition = target.position - rotation * Vector3.forward * distance + Vector3.up * offset.y;
+
+        // Si NO está en dash, hacer raycast para evitar paredes
+        if (!isDashing)
+        {
+            RaycastHit hit;
+            Vector3 direction = (desiredPosition - target.position).normalized;
+
+            if (Physics.Raycast(target.position + Vector3.up * 1.5f, direction, out hit, distance))
+            {
+                transform.position = hit.point - direction * 0.2f;
+            }
+            else
+            {
+                transform.position = desiredPosition;
+            }
         }
         else
         {
-            // No hay colisión, usar la posición deseada
-            transform.position = targetPosition;
+            // Si está en dash, simplemente seguir sin raycast
+            transform.position = desiredPosition;
         }
 
-        transform.LookAt(target.position + Vector3.up * 1.5f); // Enfoca al pecho/cabeza
+        transform.LookAt(target.position + Vector3.up * 1.5f);
     }
+
+
 }
