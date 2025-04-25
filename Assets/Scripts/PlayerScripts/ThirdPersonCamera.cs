@@ -24,22 +24,21 @@ public class ThirdPersonCamera : MonoBehaviour
     void LateUpdate()
     {
         bool isDashing = playerMovement != null && playerMovement.IsDashing();
-        bool isRunning = playerMovement != null && playerMovement.IsRunning();
 
+        // Movimiento de cámara solo si no está haciendo dash
         if (!isDashing)
         {
-            // Solo mover la cámara con el mouse si NO está en dash
             Vector2 mouseInput = Mouse.current.delta.ReadValue() * sensitivity * Time.deltaTime;
             yaw += mouseInput.x;
             pitch -= mouseInput.y;
             pitch = Mathf.Clamp(pitch, minY, maxY);
         }
 
-        // Rotación actual (mantiene la última vista si está en dash)
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
         Vector3 desiredPosition = target.position - rotation * Vector3.forward * distance + Vector3.up * offset.y;
+        Vector3 finalPosition = desiredPosition;
 
-        // Si NO está en dash, hacer raycast para evitar paredes
+        // Aplica raycast para evitar colisiones, a menos que esté dashing
         if (!isDashing)
         {
             RaycastHit hit;
@@ -47,39 +46,15 @@ public class ThirdPersonCamera : MonoBehaviour
 
             if (Physics.Raycast(target.position + Vector3.up * 1.5f, direction, out hit, distance))
             {
-                transform.position = hit.point - direction * 0.2f;
+                finalPosition = hit.point - direction * 0.2f;
             }
-            else
-            {
-                transform.position = desiredPosition;
-            }
-        }
-        else
-        {
-            // Si está en dash, simplemente seguir sin raycast
-            transform.position = desiredPosition;
-        }
-        if (!isRunning)
-        {
-            RaycastHit hit;
-            Vector3 direction = (desiredPosition - target.position).normalized;
-
-            if (Physics.Raycast(target.position + Vector3.up * 1.5f, direction, out hit, distance))
-            {
-                transform.position = hit.point - direction * 0.2f;
-            }
-            else
-            {
-                transform.position = desiredPosition;
-            }
-        }
-        else
-        {
-            transform.position = desiredPosition;
         }
 
+        transform.position = finalPosition;
         transform.LookAt(target.position + Vector3.up * 1.5f);
     }
+
+
 
 
 }
