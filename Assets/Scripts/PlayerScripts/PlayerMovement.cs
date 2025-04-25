@@ -15,37 +15,39 @@ public class PlayerMovement : MonoBehaviour
     InputAction dashAction;
     float velocityY;
     Vector3 movement;
-
+    
     public Transform cameraTransform;
-
     public GameObject video;
     public GameObject UI;
     public GameObject dashIcon;
-
     public int speed = 10;
     public int gravityScale = 10;
     public float jumpHeight = 2f;
     public float fallAcceleration = 2f;
     public float maxFallSpeed = -50f;
     private float fallVelocity = 0f;
-
     public float rotationSpeed = 5f;
     public float dashCooldown = 1f;
     public float dashTime = 1f;
     public float dashSpeed = 10f;
-
     public int maxJump = 1;
     public int CandyCount = 0;
     public int memoryCount = 0;
-
     public CandyUI candyUI;
     public MemoryUI memoryUI;
-
     public int jumpCount = 0;
     private int sprintMultiplier = 1;
     private VideoPlayer videoPlayer;
     private bool isDashing = false;
+    private bool isRunning = false;
     private Quaternion dashRotation; // guarda la rotación al iniciar el dash
+
+    //variables de la camara
+    public Camera playerCamera;
+    public Camera eventCamera;
+    public float eventCameraDuration = 3f;
+    private bool eventTriggered = false;
+
 
 
     void Start()
@@ -118,7 +120,9 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleSprint()
     {
+        isRunning = true;
         sprintMultiplier = (sprintAction.IsPressed() && controller.isGrounded) ? 2 : 1;
+        isRunning = false;
     }
 
     void HandleMovement()
@@ -212,18 +216,16 @@ public class PlayerMovement : MonoBehaviour
         {
             MemoryVideo videoScript = other.GetComponent<MemoryVideo>();
             if (videoScript != null)
-            {
-                StartCoroutine(videoScript.playMemory());
+            {                
+                StartCoroutine(videoScript.playMemory());                
             }
-
             Destroy(other.gameObject);
             memoryCount++;
-            memoryUI.UpdateMemoryCount(memoryCount);
-
+            memoryUI.UpdateMemoryCount(memoryCount);           
             if (memoryCount >= 6)
                 StartCoroutine(PlayMemoryVideo());
         }
-    }
+    }    
     IEnumerator PlayMemoryVideo()
     {
         yield return new WaitForSeconds(2f);
@@ -244,5 +246,9 @@ public class PlayerMovement : MonoBehaviour
     public bool IsDashing()
     {
         return isDashing;
+    }
+    public bool IsRunning()
+    {
+        return isRunning;
     }
 }

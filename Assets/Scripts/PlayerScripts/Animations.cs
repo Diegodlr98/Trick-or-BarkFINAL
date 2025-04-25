@@ -8,6 +8,7 @@ public class Animations : MonoBehaviour
     private Animator anim;
     public CharacterController characterController;
     PlayerMovement player;
+    PlayerHealth Health;
 
     InputAction moveAction;
     InputAction jumpAction;
@@ -17,6 +18,7 @@ public class Animations : MonoBehaviour
     void Start()
     {
         player = GetComponent<PlayerMovement>();
+        Health = GetComponent<PlayerHealth>();
         anim = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         moveAction = InputSystem.actions.FindAction("Move");
@@ -54,10 +56,8 @@ public class Animations : MonoBehaviour
         if (dashAction.WasPressedThisFrame() && player.CandyCount >= 25)
         {
             anim.SetTrigger("Dash");
-        }
-
-            anim.SetBool("IsGrounded", characterController.isGrounded);
-        
+        }       
+            anim.SetBool("IsGrounded", characterController.isGrounded);        
     }
     
 

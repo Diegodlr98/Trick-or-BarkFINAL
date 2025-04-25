@@ -5,10 +5,12 @@ using System;
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 3;
-    private int currentHealth;
+    public int currentHealth;
     public HealthUI healthUI;
     public GameObject gameOver;
 
+    public CharacterController characterController;
+    private Animator anim;
     private bool canTakeDamage = true;
     public bool gameover = false;
     public float invulnerabilityTime = 2f;
@@ -22,6 +24,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
+        anim = GetComponent<Animator>();
         currentHealth = maxHealth;
         healthUI.SetMaxHearts(maxHealth);
 
@@ -53,7 +56,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            GameOver();
+            StartCoroutine(HandleDeath());
         }
     }
 
@@ -65,9 +68,21 @@ public class PlayerHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            GameOver();
+            StartCoroutine(HandleDeath());
         }
     }
+    private IEnumerator HandleDeath()
+    {
+        anim.SetBool("isDead", true);
+        characterController.enabled = false; // opcional: evita que se siga moviendo
+
+        yield return new WaitForSeconds(4f); // espera la duración de la animación
+
+        GameOver();
+    }
+
+
+
 
     private IEnumerator InvulnerabilityCooldown()
     {

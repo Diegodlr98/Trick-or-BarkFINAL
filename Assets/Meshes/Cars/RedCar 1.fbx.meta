@@ -9,6 +9,21 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Red_Car-Material
     second: {fileID: 2100000, guid: 1251475f200ca15458c41be942bebc7a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: carroceria_mat
+    second: {fileID: 2100000, guid: 4e136375fdcf0d54093671ab66a7c96b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: farolas_mat
+    second: {fileID: 2100000, guid: c7cb01ed608f3674b89355c28d2eb7ba, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: parabrisas_mat
+    second: {fileID: 2100000, guid: 822c0b03021725440a63860329018bec, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

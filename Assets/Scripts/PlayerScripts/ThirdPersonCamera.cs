@@ -24,6 +24,7 @@ public class ThirdPersonCamera : MonoBehaviour
     void LateUpdate()
     {
         bool isDashing = playerMovement != null && playerMovement.IsDashing();
+        bool isRunning = playerMovement != null && playerMovement.IsRunning();
 
         if (!isDashing)
         {
@@ -56,6 +57,24 @@ public class ThirdPersonCamera : MonoBehaviour
         else
         {
             // Si está en dash, simplemente seguir sin raycast
+            transform.position = desiredPosition;
+        }
+        if (!isRunning)
+        {
+            RaycastHit hit;
+            Vector3 direction = (desiredPosition - target.position).normalized;
+
+            if (Physics.Raycast(target.position + Vector3.up * 1.5f, direction, out hit, distance))
+            {
+                transform.position = hit.point - direction * 0.2f;
+            }
+            else
+            {
+                transform.position = desiredPosition;
+            }
+        }
+        else
+        {
             transform.position = desiredPosition;
         }
 
