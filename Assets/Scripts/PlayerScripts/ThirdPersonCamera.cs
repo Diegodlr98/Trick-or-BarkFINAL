@@ -23,38 +23,17 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        bool isDashing = playerMovement != null && playerMovement.IsDashing();
+        // Movimiento de cámara con el mouse
+        Vector2 mouseInput = Mouse.current.delta.ReadValue() * sensitivity * Time.deltaTime;
+        yaw += mouseInput.x;
+        pitch -= mouseInput.y;
+        pitch = Mathf.Clamp(pitch, minY, maxY);
 
-        // Movimiento de cámara solo si no está haciendo dash
-        if (!isDashing)
-        {
-            Vector2 mouseInput = Mouse.current.delta.ReadValue() * sensitivity * Time.deltaTime;
-            yaw += mouseInput.x;
-            pitch -= mouseInput.y;
-            pitch = Mathf.Clamp(pitch, minY, maxY);
-        }
-
+        // Rotación y posición fija
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
         Vector3 desiredPosition = target.position - rotation * Vector3.forward * distance + Vector3.up * offset.y;
-        Vector3 finalPosition = desiredPosition;
 
-        // Aplica raycast para evitar colisiones, a menos que esté dashing
-        if (!isDashing)
-        {
-            RaycastHit hit;
-            Vector3 direction = (desiredPosition - target.position).normalized;
-
-            if (Physics.Raycast(target.position + Vector3.up * 1.5f, direction, out hit, distance))
-            {
-                finalPosition = hit.point - direction * 0.2f;
-            }
-        }
-
-        transform.position = finalPosition;
+        transform.position = desiredPosition;
         transform.LookAt(target.position + Vector3.up * 1.5f);
     }
-
-
-
-
 }
