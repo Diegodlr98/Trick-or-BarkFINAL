@@ -29,6 +29,14 @@ public class TutorialMessages : MonoBehaviour
         ShowMessage("Salta con ESPACIO, recoge fragmentos de memoria.");
         yield return new WaitForSeconds(5f);
         HideMessage();
+        yield return new WaitForSeconds(3f);
+        ShowMessage("¡Cuidado con las luces! los coches y crios con luces pueden herirte, ¡que no te vean!");
+        yield return new WaitForSeconds(5f);
+        HideMessage();
+        yield return new WaitForSeconds(3f);
+        ShowMessage("¡Explora el mapa y recupera todos tus recuerdos!");
+        yield return new WaitForSeconds(5f);
+        HideMessage();
     }
 
     private void Update()
