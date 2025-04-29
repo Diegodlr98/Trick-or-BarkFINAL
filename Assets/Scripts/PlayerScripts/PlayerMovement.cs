@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -13,13 +14,16 @@ public class PlayerMovement : MonoBehaviour
     InputAction jumpAction;
     InputAction sprintAction;
     InputAction dashAction;
+    InputAction nextAction;
     float velocityY;
     Vector3 movement;
-    
+
     public Transform cameraTransform;
     public GameObject video;
     public GameObject UI;
     public GameObject dashIcon;
+    public GameObject skipMessage; 
+
     public int speed = 10;
     public int gravityScale = 10;
     public float jumpHeight = 2f;
@@ -40,15 +44,14 @@ public class PlayerMovement : MonoBehaviour
     private VideoPlayer videoPlayer;
     private bool isDashing = false;
     private bool isRunning = false;
-    private Quaternion dashRotation; // guarda la rotación al iniciar el dash
+    private Quaternion dashRotation;
 
-    //variables de la camara
     public Camera playerCamera;
     public Camera eventCamera;
     public float eventCameraDuration = 3f;
-    private bool eventTriggered = false;
 
-
+    public float coyoteTime = 0.2f;
+    private float coyoteTimeCounter = 0f;
 
     void Start()
     {
@@ -58,10 +61,15 @@ public class PlayerMovement : MonoBehaviour
         jumpAction = InputSystem.actions.FindAction("Jump");
         sprintAction = InputSystem.actions.FindAction("Sprint");
         dashAction = InputSystem.actions.FindAction("Dash");
+        nextAction = InputSystem.actions.FindAction("Next");
+        nextAction.Enable();
 
         candyUI.UpdateCandyCount(CandyCount);
         memoryUI.UpdateMemoryCount(memoryCount);
         UpdateDashIconVisibility();
+
+        if (skipMessage != null)
+            skipMessage.SetActive(false);
     }
 
     void Update()
@@ -77,32 +85,35 @@ public class PlayerMovement : MonoBehaviour
     {
         if (controller.isGrounded)
         {
-            // Siempre reinicia el salto cuando está en el suelo
+            coyoteTimeCounter = coyoteTime;
             jumpCount = 0;
             fallVelocity = 0f;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
         }
 
         if (jumpAction.WasPressedThisFrame())
         {
-            if (controller.isGrounded)
+            if (coyoteTimeCounter > 0f)
             {
-                // Primer salto desde el suelo
                 velocityY = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
                 jumpCount = 1;
+                coyoteTimeCounter = 0f;
             }
             else if (CandyCount >= 15 && jumpCount < maxJump)
             {
-                // Segundo salto en el aire (doble salto)
                 velocityY = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
-                fallVelocity = 0f; // IMPORTANTE: resetea caída acumulada
+                fallVelocity = 0f;
                 jumpCount++;
             }
         }
     }
+
     void HandleGravity()
     {
-        if (isDashing)
-            return;
+        if (isDashing) return;
 
         if (controller.isGrounded && velocityY < 0)
         {
@@ -117,7 +128,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     void HandleSprint()
     {
         isRunning = true;
@@ -131,7 +141,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.sqrMagnitude > 0.01f)
         {
-            // Dirección relativa a la cámara
             Vector3 camForward = cameraTransform.forward;
             Vector3 camRight = cameraTransform.right;
             camForward.y = 0;
@@ -142,10 +151,8 @@ public class PlayerMovement : MonoBehaviour
             Vector3 moveDir = camForward * input.y + camRight * input.x;
             moveDir.Normalize();
 
-            // Movimiento del personaje
             Vector3 horizontalMove = moveDir * speed * sprintMultiplier;
             movement = horizontalMove + (isDashing ? Vector3.zero : Vector3.up * velocityY);
-
 
             if (!isDashing)
             {
@@ -154,17 +161,17 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                // Mantiene la rotación fija durante el dash
                 transform.rotation = dashRotation;
             }
-
         }
         else
         {
             movement = Vector3.up * velocityY;
         }
+
         controller.Move(movement * Time.deltaTime);
     }
+
     void HandleDash()
     {
         if (dashAction.WasPressedThisFrame() && CandyCount >= 25 && canDash)
@@ -172,11 +179,12 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(DashCoroutine());
         }
     }
+
     IEnumerator DashCoroutine()
     {
         canDash = false;
         isDashing = true;
-        dashRotation = transform.rotation; // GUARDAMOS LA ROTACIÓN ACTUAL
+        dashRotation = transform.rotation;
 
         Vector3 dashDirection = transform.forward;
         UpdateDashIconVisibility(false);
@@ -195,7 +203,6 @@ public class PlayerMovement : MonoBehaviour
         UpdateDashIconVisibility(true);
     }
 
-
     void UpdateDashIconVisibility(bool show = true)
     {
         if (dashIcon != null)
@@ -203,6 +210,7 @@ public class PlayerMovement : MonoBehaviour
             dashIcon.SetActive(CandyCount >= 5 && canDash && show);
         }
     }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Candy"))
@@ -216,39 +224,53 @@ public class PlayerMovement : MonoBehaviour
         {
             MemoryVideo videoScript = other.GetComponent<MemoryVideo>();
             if (videoScript != null)
-            {                
-                StartCoroutine(videoScript.playMemory());                
+            {
+                memoryCount++;
+                memoryUI.UpdateMemoryCount(memoryCount);
+
+                videoScript.playerMovement = this;
+                StartCoroutine(videoScript.playMemory());
             }
+
             Destroy(other.gameObject);
-            memoryCount++;
-            memoryUI.UpdateMemoryCount(memoryCount);           
-            if (memoryCount >= 6)
-                StartCoroutine(PlayMemoryVideo());
         }
-    }    
-    IEnumerator PlayMemoryVideo()
+    }
+
+    public IEnumerator PlayMemoryVideo()
     {
         yield return new WaitForSeconds(2f);
 
         video.SetActive(true);
         UI.SetActive(false);
 
+        if (skipMessage != null)
+            skipMessage.SetActive(true); //  Mostrar mensaje
+
         videoPlayer = video.GetComponent<VideoPlayer>();
+        videoPlayer.Play();
 
         while (!videoPlayer.isPlaying)
             yield return null;
 
         while (videoPlayer.isPlaying)
+        {
+            if (nextAction.WasPressedThisFrame())
+            {
+                videoPlayer.Stop();
+                break;
+            }
             yield return null;
+        }
+
+        if (skipMessage != null)
+            skipMessage.SetActive(false); //  Ocultar mensaje
+
+        video.SetActive(false);
+        UI.SetActive(true);
 
         SceneManager.LoadScene("Final");
     }
-    public bool IsDashing()
-    {
-        return isDashing;
-    }
-    public bool IsRunning()
-    {
-        return isRunning;
-    }
+
+    public bool IsDashing() => isDashing;
+    public bool IsRunning() => isRunning;
 }

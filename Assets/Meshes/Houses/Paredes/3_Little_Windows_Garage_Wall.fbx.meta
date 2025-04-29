@@ -3,7 +3,17 @@ guid: 09d000b0c2d461b4fb9be441d49aa6c7
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 3_Little_Windows_Garage_Wall.001
+    second: {fileID: 2100000, guid: 05f2436ba75dbf1499d72d3ed4a95e5b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass_3_Little_Windows_Garage_Wall.001
+    second: {fileID: 2100000, guid: da5844dc19f4ee543be3448739e9fa7a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
