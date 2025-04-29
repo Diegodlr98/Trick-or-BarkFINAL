@@ -63,9 +63,9 @@ public class PlayerMovement : MonoBehaviour
         nextAction = InputSystem.actions.FindAction("Next");
         nextAction.Enable();
 
-        candyUI.UpdateCandyCount(CandyCount);
-        memoryUI.UpdateMemoryCount(memoryCount);
-        UpdateDashIconVisibility();
+        //candyUI.UpdateCandyCount(CandyCount);
+        //memoryUI.UpdateMemoryCount(memoryCount);
+        //UpdateDashIconVisibility();
 
         if (skipMessage != null)
             skipMessage.SetActive(false);
