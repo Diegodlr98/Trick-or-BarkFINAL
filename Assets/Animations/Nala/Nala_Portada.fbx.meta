@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Body.003
-    second: {fileID: 2100000, guid: 61879871c67630c4b949fd5bda2661a9, type: 2}
+    second: {fileID: 2100000, guid: 0fcf6fd6425d16f4cb51f82e3128f01e, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -18,12 +18,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Details Dientes
-    second: {fileID: 2100000, guid: ec8960042dcc95247a7197a528e340fb, type: 2}
+    second: {fileID: 2100000, guid: 1c2bdb293212f6d47a2a5712ae92f03f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Details Lengua
-    second: {fileID: 2100000, guid: ec8960042dcc95247a7197a528e340fb, type: 2}
+    second: {fileID: 2100000, guid: 1c2bdb293212f6d47a2a5712ae92f03f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
