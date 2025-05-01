@@ -30,7 +30,7 @@ public class TutorialMessages : MonoBehaviour
         yield return new WaitForSeconds(5f);
         HideMessage();
         yield return new WaitForSeconds(3f);
-        ShowMessage("¡Cuidado con las luces! los coches y crios con luces pueden herirte, ¡que no te vean!");
+        ShowMessage("¡Cuidado con las luces! los coches y crios con luces pueden herirte!");
         yield return new WaitForSeconds(5f);
         HideMessage();
         yield return new WaitForSeconds(3f);
