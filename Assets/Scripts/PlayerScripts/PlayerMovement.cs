@@ -52,6 +52,11 @@ public class PlayerMovement : MonoBehaviour
     public float coyoteTime = 0.2f;
     private float coyoteTimeCounter = 0f;
 
+    [Header("SFX")]
+    public AudioClip jumpSFX;
+    public AudioClip dashSFX;
+    public AudioSource sfxAudioSource;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -62,10 +67,6 @@ public class PlayerMovement : MonoBehaviour
         dashAction = InputSystem.actions.FindAction("Dash");
         nextAction = InputSystem.actions.FindAction("Next");
         nextAction.Enable();
-
-        //candyUI.UpdateCandyCount(CandyCount);
-        //memoryUI.UpdateMemoryCount(memoryCount);
-        //UpdateDashIconVisibility();
 
         if (skipMessage != null)
             skipMessage.SetActive(false);
@@ -78,7 +79,6 @@ public class PlayerMovement : MonoBehaviour
         HandleSprint();
         HandleMovement();
         HandleDash();
-
     }
 
     void HandleJump()
@@ -101,12 +101,14 @@ public class PlayerMovement : MonoBehaviour
                 velocityY = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
                 jumpCount = 1;
                 coyoteTimeCounter = 0f;
+                PlaySFX(jumpSFX); // sonido de salto
             }
             else if (CandyCount >= 15 && jumpCount < maxJump)
             {
                 velocityY = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
                 fallVelocity = 0f;
                 jumpCount++;
+                PlaySFX(jumpSFX); // sonido de doble salto
             }
         }
     }
@@ -189,6 +191,8 @@ public class PlayerMovement : MonoBehaviour
         Vector3 dashDirection = transform.forward;
         UpdateDashIconVisibility(false);
 
+        PlaySFX(dashSFX); // sonido de dash
+
         float elapsedTime = 0f;
         while (elapsedTime < dashTime)
         {
@@ -217,10 +221,8 @@ public class PlayerMovement : MonoBehaviour
         {
             CandyCount++;
             candyUI.UpdateCandyCount(CandyCount);
-
             StartCoroutine(DestroyAfterSound(other.gameObject));
         }
-
 
         if (other.CompareTag("prueba"))
         {
@@ -237,38 +239,28 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(DestroyAfterSound(other.gameObject));
         }
     }
+
     IEnumerator DestroyAfterSound(GameObject obj)
     {
         AudioSource source = obj.GetComponent<AudioSource>();
         if (source != null && source.clip != null)
         {
-            // 1. Crear un GameObject temporal solo para el sonido
             GameObject tempAudio = new GameObject("TempAudio");
             AudioSource tempSource = tempAudio.AddComponent<AudioSource>();
+            tempSource.outputAudioMixerGroup = source.outputAudioMixerGroup;
             tempSource.clip = source.clip;
             tempSource.Play();
-
-            // 2. Desactivar el objeto original inmediatamente (oculta visualmente)
             obj.SetActive(false);
-
-            // 3. Destruir el objeto original
             Destroy(obj);
-
-            // 4. Esperar hasta que el sonido termine y destruir el GameObject temporal
             Destroy(tempAudio, tempSource.clip.length);
         }
         else
         {
-            // Si no hay sonido, simplemente destruir el objeto
             Destroy(obj);
         }
 
         yield return null;
     }
-
-
-
-
 
     public IEnumerator PlayMemoryVideo()
     {
@@ -278,7 +270,7 @@ public class PlayerMovement : MonoBehaviour
         UI.SetActive(false);
 
         if (skipMessage != null)
-            skipMessage.SetActive(true); //  Mostrar mensaje
+            skipMessage.SetActive(true);
 
         videoPlayer = video.GetComponent<VideoPlayer>();
         videoPlayer.Play();
@@ -297,7 +289,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (skipMessage != null)
-            skipMessage.SetActive(false); //  Ocultar mensaje
+            skipMessage.SetActive(false);
 
         video.SetActive(false);
         UI.SetActive(true);
@@ -308,5 +300,11 @@ public class PlayerMovement : MonoBehaviour
     public bool IsDashing() => isDashing;
     public bool IsRunning() => isRunning;
 
-
+    void PlaySFX(AudioClip clip)
+    {
+        if (clip != null && sfxAudioSource != null)
+        {
+            sfxAudioSource.PlayOneShot(clip);
+        }
+    }
 }
