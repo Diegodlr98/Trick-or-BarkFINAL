@@ -11,6 +11,7 @@ public class TutorialMessages : MonoBehaviour
 
     private bool doubleJumpMessageShown = false;
     private bool dashMessageShown = false;
+    private bool endMessageShown = false;
 
     private void Start()
     {
@@ -21,7 +22,7 @@ public class TutorialMessages : MonoBehaviour
     {
         // Mensaje inicial
         ShowMessage("¡Usa WASD para moverte y recoge chuches para obtener poderes!.");
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         HideMessage();
 
         // Mensaje programado después de un tiempo
@@ -31,11 +32,11 @@ public class TutorialMessages : MonoBehaviour
         HideMessage();
         yield return new WaitForSeconds(3f);
         ShowMessage("¡Cuidado con las luces! los coches y crios con luces pueden herirte!");
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         HideMessage();
         yield return new WaitForSeconds(3f);
         ShowMessage("¡Explora el mapa y recupera todos tus recuerdos!");
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         HideMessage();
     }
 
@@ -58,6 +59,15 @@ public class TutorialMessages : MonoBehaviour
             ShowMessage("¡Has desbloqueado el DASH! Usa E para impulsarte.");
             StartCoroutine(HideAfterDelay(5f));
         }
+        if (player.memoryCount >= 5)
+        {
+            new WaitForSeconds(5f);
+            endMessageShown = true;            
+            ShowMessage("Las puertas del cementerio se han abierto...");            
+            StartCoroutine(HideAfterDelay(5f));
+            
+        }
+
     }
 
     private void ShowMessage(string text)

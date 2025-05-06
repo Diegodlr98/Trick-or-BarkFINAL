@@ -294,7 +294,7 @@ public class PlayerMovement : MonoBehaviour
         video.SetActive(false);
         UI.SetActive(true);
 
-        SceneManager.LoadScene("Final");
+        SceneManager.LoadScene("MainMenuFinal");
     }
 
     public bool IsDashing() => isDashing;
