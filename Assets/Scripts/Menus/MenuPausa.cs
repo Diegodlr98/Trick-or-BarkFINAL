@@ -23,9 +23,7 @@ public class MenuPausa : MonoBehaviour
 
     void Start()
     {
-        // BORRAR PREFERENCIAS para testeo (descomenta si quieres hacer un reset)
-         PlayerPrefs.DeleteAll(); 
-         PlayerPrefs.Save();
+        
 
         float volumenGuardado = PlayerPrefs.GetFloat("volumen", 0.5f);
         if (volumenGuardado < 0.0001f) volumenGuardado = 0.5f;
