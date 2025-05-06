@@ -60,18 +60,14 @@ public class MenuPausa : MonoBehaviour
             }
         }
     }
-
     public void CambiarVolumen(float valor)
-    {
-        Debug.Log("Slider volumen cambiado: " + valor);
-
+    {        
         float volumenDB = Mathf.Log10(Mathf.Clamp(valor, 0.0001f, 1f)) * 20f;
         audioMixer.SetFloat("MasterVolume", volumenDB);
 
         if (inputVolumen != null)
         {
-            inputVolumen.text = valor.ToString("F2");
-            Debug.Log("Texto actualizado a: " + inputVolumen.text);
+            inputVolumen.text = valor.ToString("F2");            
         }
 
         PlayerPrefs.SetFloat("volumen", valor);

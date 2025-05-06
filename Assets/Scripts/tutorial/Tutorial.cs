@@ -28,7 +28,7 @@ public class TutorialMessages : MonoBehaviour
         // Mensaje programado después de un tiempo
         yield return new WaitForSeconds(3f);
         ShowMessage("Salta con ESPACIO, recoge fragmentos de memoria.");
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         HideMessage();
         yield return new WaitForSeconds(3f);
         ShowMessage("¡Cuidado con las luces! los coches y crios con luces pueden herirte!");
@@ -41,9 +41,7 @@ public class TutorialMessages : MonoBehaviour
     }
 
     private void Update()
-    {
-        
-
+    {       
         // Mensaje para el doble salto (se muestra solo una vez)
         if (player.CandyCount >= 15 && !doubleJumpMessageShown)
         {
@@ -51,7 +49,6 @@ public class TutorialMessages : MonoBehaviour
             ShowMessage("¡Has desbloqueado el DOBLE SALTO!");
             StartCoroutine(HideAfterDelay(5f));
         }
-
         // Mensaje para el dash (se muestra solo una vez)
         if (player.CandyCount >= 25 && !dashMessageShown)
         {
@@ -59,17 +56,21 @@ public class TutorialMessages : MonoBehaviour
             ShowMessage("¡Has desbloqueado el DASH! Usa E para impulsarte.");
             StartCoroutine(HideAfterDelay(5f));
         }
-        if (player.memoryCount >= 5)
+        if (player.memoryCount >= 5 && endMessageShown == false)
         {
             new WaitForSeconds(5f);
-            endMessageShown = true;            
-            ShowMessage("Las puertas del cementerio se han abierto...");            
-            StartCoroutine(HideAfterDelay(5f));
-            
+            StartCoroutine(ShowEndMessage());
         }
-
     }
-
+    private IEnumerator ShowEndMessage()
+    {
+        new WaitForSeconds(5f);
+        endMessageShown = true;
+        ShowMessage("Las puertas del cementerio se han abierto...");
+        StartCoroutine(HideAfterDelay(5f));
+        endMessageShown = true;
+        yield return null;
+    }
     private void ShowMessage(string text)
     {
         messageText.text = text;

@@ -80,10 +80,6 @@ public class PlayerHealth : MonoBehaviour
 
         GameOver();
     }
-
-
-
-
     private IEnumerator InvulnerabilityCooldown()
     {
         canTakeDamage = false;
