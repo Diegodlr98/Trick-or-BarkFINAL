@@ -43,11 +43,7 @@ public class PlayerMovement : MonoBehaviour
     private VideoPlayer videoPlayer;
     private bool isDashing = false;
     private bool isRunning = false;
-    private Quaternion dashRotation;
-
-    public Camera playerCamera;
-    public Camera eventCamera;
-    public float eventCameraDuration = 3f;
+    private Quaternion dashRotation;   
 
     public float coyoteTime = 0.2f;
     private float coyoteTimeCounter = 0f;
@@ -56,6 +52,9 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip jumpSFX;
     public AudioClip dashSFX;
     public AudioSource sfxAudioSource;
+
+    [Header("Audio General")]
+    public AudioSource backgroundMusic; // Música de fondo a pausar durante cinemáticas
 
     void Start()
     {
@@ -70,6 +69,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (skipMessage != null)
             skipMessage.SetActive(false);
+
+        // Buscar automáticamente la música si no se ha asignado en el inspector
+        if (backgroundMusic == null)
+        {
+            GameObject musicObj = GameObject.FindWithTag("Music");
+            if (musicObj != null)
+            {
+                backgroundMusic = musicObj.GetComponent<AudioSource>();
+            }
+        }
     }
 
     void Update()
@@ -101,14 +110,14 @@ public class PlayerMovement : MonoBehaviour
                 velocityY = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
                 jumpCount = 1;
                 coyoteTimeCounter = 0f;
-                PlaySFX(jumpSFX); // sonido de salto
+                PlaySFX(jumpSFX);
             }
             else if (CandyCount >= 15 && jumpCount < maxJump)
             {
                 velocityY = Mathf.Sqrt(jumpHeight * 2f * (9.8f * gravityScale));
                 fallVelocity = 0f;
                 jumpCount++;
-                PlaySFX(jumpSFX); // sonido de doble salto
+                PlaySFX(jumpSFX);
             }
         }
     }
@@ -191,7 +200,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 dashDirection = transform.forward;
         UpdateDashIconVisibility(false);
 
-        PlaySFX(dashSFX); // sonido de dash
+        PlaySFX(dashSFX);
 
         float elapsedTime = 0f;
         while (elapsedTime < dashTime)
@@ -273,6 +282,12 @@ public class PlayerMovement : MonoBehaviour
             skipMessage.SetActive(true);
 
         videoPlayer = video.GetComponent<VideoPlayer>();
+
+        //  PAUSAR LA MÚSICA DEL JUEGO
+        if (backgroundMusic != null && backgroundMusic.isPlaying)
+        {
+            backgroundMusic.Pause();
+        }
         videoPlayer.Play();
 
         while (!videoPlayer.isPlaying)
@@ -294,8 +309,20 @@ public class PlayerMovement : MonoBehaviour
         video.SetActive(false);
         UI.SetActive(true);
 
-        SceneManager.LoadScene("MainMenuFinal");
+        // REANUDAR LA MÚSICA
+        if (backgroundMusic != null)
+        {
+            backgroundMusic.UnPause();
+        }
+
+        //  Cargar final solo si se han recogido 6 memorias
+        if (memoryCount >= 6)
+        {
+            SceneManager.LoadScene("MainMenuFinal");
+        }
     }
+
+
 
     public bool IsDashing() => isDashing;
     public bool IsRunning() => isRunning;

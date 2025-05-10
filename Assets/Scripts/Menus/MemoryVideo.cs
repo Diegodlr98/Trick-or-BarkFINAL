@@ -18,6 +18,12 @@ public class MemoryVideo : MonoBehaviour
         Time.timeScale = 0;
         memory.SetActive(true);
 
+        // Pausar música de fondo
+        if (playerMovement != null && playerMovement.backgroundMusic != null && playerMovement.backgroundMusic.isPlaying)
+        {
+            playerMovement.backgroundMusic.Pause();
+        }
+
         if (skipMessage != null)
             skipMessage.SetActive(true);
 
@@ -45,9 +51,15 @@ public class MemoryVideo : MonoBehaviour
 
         memory.SetActive(false);
 
+        // Reanudar música de fondo
+        if (playerMovement != null && playerMovement.backgroundMusic != null)
+        {
+            playerMovement.backgroundMusic.UnPause();
+        }
+
         if (playerMovement != null && playerMovement.memoryCount >= 6)
         {
-            Time.timeScale = 1f; // REACTIVAR TIEMPO ANTES DE LA CINEMÁTICA FINAL
+            Time.timeScale = 1f; // Reactivar tiempo antes de la cinemática final
             yield return playerMovement.StartCoroutine(playerMovement.PlayMemoryVideo());
         }
         else
