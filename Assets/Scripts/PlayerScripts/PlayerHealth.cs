@@ -76,14 +76,20 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator HandleDeath()
     {
         anim.SetBool("isDead", true);
-        characterController.enabled = false; // opcional: evita que se siga moviendo
-        
-       // PlayerMovement.enabled = false; // desactiva el script
 
-        yield return new WaitForSeconds(4f); // espera la duración de la animación
+        // Espera un breve momento antes de desactivar componentes, para asegurar que arranque la animación
+        yield return new WaitForSeconds(0.2f);
+
+        // Alternativa: desactiva el movimiento sin desactivar el script del todo aún
+        PlayerMovement.enabled = false;
+        characterController.enabled = false;
+
+        // Espera la duración completa de la animación (ajusta si es más corta)
+        yield return new WaitForSeconds(3.5f);
 
         GameOver();
     }
+
     private IEnumerator InvulnerabilityCooldown()
     {
         canTakeDamage = false;
