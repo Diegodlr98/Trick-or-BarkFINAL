@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,7 +19,7 @@ public class MemoryVideo : MonoBehaviour
         Time.timeScale = 0;
         memory.SetActive(true);
 
-        // Pausar música de fondo
+        // Pausar música
         if (playerMovement != null && playerMovement.backgroundMusic != null && playerMovement.backgroundMusic.isPlaying)
         {
             playerMovement.backgroundMusic.Pause();
@@ -28,8 +29,11 @@ public class MemoryVideo : MonoBehaviour
             skipMessage.SetActive(true);
 
         player = memory.GetComponent<VideoPlayer>();
-        if (player != null)
+
+        //  Usa el siguiente clip en orden
+        if (player != null && MemoryManager.Instance != null)
         {
+            player.clip = MemoryManager.Instance.GetNextMemoryClip();
             player.Play();
 
             while (!player.isPlaying)
@@ -51,15 +55,16 @@ public class MemoryVideo : MonoBehaviour
 
         memory.SetActive(false);
 
-        // Reanudar música de fondo
+        // Reanudar música
         if (playerMovement != null && playerMovement.backgroundMusic != null)
         {
             playerMovement.backgroundMusic.UnPause();
         }
 
-        if (playerMovement != null && playerMovement.memoryCount >= 6)
+        // Verificar si se han completado todas las memorias
+        if (playerMovement != null && MemoryManager.Instance.AllMemoriesCollected())
         {
-            Time.timeScale = 1f; // Reactivar tiempo antes de la cinemática final
+            Time.timeScale = 1f;
             yield return playerMovement.StartCoroutine(playerMovement.PlayMemoryVideo());
         }
         else
@@ -69,4 +74,5 @@ public class MemoryVideo : MonoBehaviour
 
         OnMemoryVideoComplete?.Invoke();
     }
+
 }
