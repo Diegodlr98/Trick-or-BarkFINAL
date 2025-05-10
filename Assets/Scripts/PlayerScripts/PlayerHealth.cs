@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
+
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 3;
@@ -9,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
     public HealthUI healthUI;
     public GameObject gameOver;
 
+    public PlayerMovement PlayerMovement;
     public CharacterController characterController;
     private Animator anim;
     private bool canTakeDamage = true;
@@ -75,6 +77,8 @@ public class PlayerHealth : MonoBehaviour
     {
         anim.SetBool("isDead", true);
         characterController.enabled = false; // opcional: evita que se siga moviendo
+        
+       // PlayerMovement.enabled = false; // desactiva el script
 
         yield return new WaitForSeconds(4f); // espera la duración de la animación
 
