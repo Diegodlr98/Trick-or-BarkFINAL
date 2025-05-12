@@ -318,6 +318,9 @@ public class PlayerMovement : MonoBehaviour
         //  Cargar final solo si se han recogido 6 memorias
         if (memoryCount >= 6)
         {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             SceneManager.LoadScene("MainMenuFinal");
         }
     }
