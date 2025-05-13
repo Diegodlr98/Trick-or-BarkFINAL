@@ -111,14 +111,23 @@ namespace MirzaBeig
 
                 // ...
 
-                void Awake()
+                /*void Awake()
                 {
                     loopingParticleSystems = FindObjectOfType<LoopingParticleSystemsManager>();
                     oneshotParticleSystems = FindObjectOfType<OneshotParticleSystemsManager>();
 
                     loopingParticleSystems.Init();
                     oneshotParticleSystems.Init();
+                }*/
+                void Awake()
+                {
+                    loopingParticleSystems = FindFirstObjectByType<LoopingParticleSystemsManager>();
+                    oneshotParticleSystems = FindFirstObjectByType<OneshotParticleSystemsManager>();
+
+                    loopingParticleSystems.Init();
+                    oneshotParticleSystems.Init();
                 }
+
 
                 // ...
 
@@ -416,13 +425,15 @@ namespace MirzaBeig
 
                         if (Input.GetMouseButtonDown(0))
                         {
-                            CameraShake cameraShake = FindObjectOfType<CameraShake>();
+                            CameraShake cameraShake = FindFirstObjectByType<CameraShake>();
 
                             cameraShake.Add(0.2f, 5.0f, 0.2f, CameraShakeTarget.Position, CameraShakeAmplitudeCurve.FadeInOut25);
                             cameraShake.Add(4.0f, 5.0f, 0.5f, CameraShakeTarget.Rotation, CameraShakeAmplitudeCurve.FadeInOut25);
 
                             oneshotParticleSystems.InstantiateParticlePrefab(mousePosition, mouse.distanceFromCamera);
                         }
+
+
                         if (Input.GetMouseButton(1))
                         {
                             oneshotParticleSystems.InstantiateParticlePrefab(mousePosition, mouse.distanceFromCamera);

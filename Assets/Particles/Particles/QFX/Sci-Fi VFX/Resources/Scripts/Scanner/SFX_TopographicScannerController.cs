@@ -27,8 +27,9 @@ namespace QFX.SFX
 
         private void Start()
         {
-            m_sfxTopographicScannables = FindObjectsOfType<SFX_TopographicScannable>();
+            m_sfxTopographicScannables = FindObjectsByType<SFX_TopographicScannable>(FindObjectsSortMode.None);
         }
+
 
         private void Update()
         {

@@ -255,11 +255,17 @@ namespace MirzaBeig
                     // I had a list to compare to from last frame. In that case, I'm not sure
                     // if the performance would be better or worse. Do a test later?
 
-                    else
+                    /*else
                     {
                         particleSystems.Clear();
                         particleSystems.AddRange(FindObjectsOfType<ParticleSystem>());
+                    }*/
+                    else
+                    {
+                        particleSystems.Clear();
+                        particleSystems.AddRange(FindObjectsByType<ParticleSystem>(FindObjectsSortMode.None));
                     }
+
 
                     parameters = new GetForceParameters();
 
